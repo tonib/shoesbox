@@ -1,0 +1,101 @@
+<% content_for :title, @song.name %>
+<h1><%= @song.name %></h1>
+
+<%= render 'shared/form_messages' , { messages: @errors } %>
+
+<p style="text-align: center">
+  <%# Artist image %>
+  <%= render 'artists/artist_image' , { artist: @song.artist , size: :thumb ,
+    img_class: 'img_100' } %><br />
+</p>
+
+<%# Stream player %>
+<!-- <audio src="<%= song_download_path( @song ) %>" controls style="margin-top: 10px; width: 100%" >
+</audio> -->
+
+<dl>
+  <dt>Artist</dt>
+  <dd>
+    <%= link_to @song.artist.name , artist_path(@song.artist)  %>
+  </dd>
+
+  <dt>Album</dt>
+  <dd>
+    <%= link_to @song.album.to_s , album_path(@song.album) %>
+  </dd>
+
+  <% if @song.track > 0 %>
+    <dt>Track number</dt>
+    <dd>
+      <%= @song.track %>
+    </dd>
+  <% end %>
+
+  <dt>Path</dt>
+  <dd>
+    <span class="breakable"><%= @settings.shared_path( @song.path ) %></span>
+  </dd>
+
+  <% if @song.genre %>
+    <dt>Genre</dt>
+    <dd>
+      <%= @song.genre %>
+    </dd>
+  <% end %>
+
+  <dt>Length</dt>
+  <dd>
+    <%= @song.seconds_to_s %>
+  </dd>
+
+  <dt>Bit rate</dt>
+  <dd>
+    <%= @song.bitrate %> Kbits / second
+  </dd>
+
+  <dt>Chanels</dt>
+  <dd>
+    <%= @song.channels %>
+  </dd>
+
+  <dt>Sample rate</dt>
+  <dd>
+    <%= @song.sample_rate %> Hz
+  </dd>
+
+  <dt>File size</dt>
+  <dd>
+    <%= number_to_human_size(@song.file_size) %> (<%= @song.file_size %> bytes)
+  </dd>
+
+</dl>
+
+<%= link_to music_cmd_player_path( song_id: @song.id , cmd: 'play_song' ) ,
+  remote: true, class:'btn btn-default' do %>
+  <span class="glyphicon glyphicon-play"></span>
+  <span class="hidden-xs">Add to queue and Play</span>
+<% end %>
+
+<%= link_to add_to_queue_songs_path( song_ids: [ @song.id ] ) ,
+  remote: true, class:'btn btn-default' do %>
+  <span class="glyphicon glyphicon-plus"></span>
+  <span class="hidden-xs">Add to queue</span>
+<% end %>
+
+<%= link_to song_download_path( @song ) ,
+  class:'btn btn-default' do %>
+  <span class="glyphicon glyphicon-download"></span>
+  <span class="hidden-xs">Download</span>
+<% end %>
+
+<%= link_to edit_song_path(@song) , class:'btn btn-default' do %>
+  <span class="glyphicon glyphicon-edit"></span>
+  <span class="hidden-xs">Edit</span>
+<% end %>
+
+<%= link_to @song , method: :delete ,
+  data: { confirm: 'Are you sure you want to delete the song?' },
+  class:'btn btn-danger' do %>
+  <span class="glyphicon glyphicon-trash"></span>
+  <span class="hidden-xs">Delete</span>
+<% end %>

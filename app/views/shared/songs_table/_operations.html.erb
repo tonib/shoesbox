@@ -1,0 +1,77 @@
+<%#
+  Renders songs operations over a table
+  PARAMS:
+  add_to_queue: Show add to queue? Default is true
+  show_edit: Show edit songs? Default is true
+  show_download: Show download songs? Default is true
+  show_delete: Show delete songs? Default is true
+  show_excel: Show Excel download button? Default is true
+  ids_prefix: Prefix for operation links ids. Default is an empty string
+%>
+<%
+  add_to_queue = true if local_assigns[:add_to_queue].nil?
+  show_edit = true if local_assigns[:show_edit].nil?
+  show_download = true if local_assigns[:show_download].nil?
+  show_delete = true if local_assigns[:show_delete].nil?
+  show_excel = true if local_assigns[:show_excel].nil?
+  ids_prefix = '' if local_assigns[:ids_prefix].nil?
+%>
+
+<%if add_to_queue %>
+  <a id="<%= ids_prefix %>add_to_queue_btn" href="#" class="btn btn-default"
+    title="Add to the current playlist">
+    <span class="glyphicon glyphicon-plus"></span>
+    <span class="hidden-xs">Add to queue</span>
+  </a>
+<% end %>
+<a id="<%= ids_prefix %>download_playlist_btn" href="#" class="btn btn-default"
+  title="Download songs as a Winamp playlist file (.m3u8)">
+  <span class="glyphicon glyphicon-list"></span>
+  <span class="hidden-xs">WinAmp playlist</span>
+</a>
+<% if show_excel %>
+  <a id="<%= ids_prefix %>download_excel_btn" href="#" class="btn btn-default"
+    title="Download Excel file with songs list">
+    <span class="glyphicon glyphicon-th"></span>
+    <span class="hidden-xs">Excel</span>
+  </a>
+<% end %>
+<% if show_download %>
+  <a id="<%= ids_prefix %>download_songs_btn" href="#" class="btn btn-default"
+    title="Download songs as Zip file">
+    <span class="glyphicon glyphicon-download"></span>
+    <span class="hidden-xs">Download</span>
+  </a>
+<% end %>
+<% if show_edit %>
+  <a id="<%= ids_prefix %>edit_songs_btn" href="#" class="btn btn-default"
+    title="Edit songs information">
+    <span class="glyphicon glyphicon-edit"></span>
+    <span class="hidden-xs">Edit</span>
+  </a>
+<% end %>
+<%if show_delete %>
+  <a id="<%= ids_prefix %>delete_songs_btn" href="#" class="btn btn-danger"
+    title="Delete song files">
+    <span class="glyphicon glyphicon-trash"></span>
+    <span class="hidden-xs">Delete</span>
+  </a>
+<% end %>
+
+<%# Path to edit multiple songs %>
+<%= hidden_field_tag 'edit_multiple_songs_path' , edit_multiple_songs_path %>
+
+<%# Path to add songs to the reproduction queue %>
+<%= hidden_field_tag 'add_to_queue_songs_path' , add_to_queue_songs_path %>
+
+<%# Path to download multiple songs %>
+<%= hidden_field_tag 'download_multiple_songs_path' , download_multiple_songs_path %>
+
+<%# Path to download a play list %>
+<%= hidden_field_tag 'download_playlist_songs_path' , download_playlist_songs_path %>
+
+<%# Path to delete songs %>
+<%= hidden_field_tag 'delete_multiple_songs_path' , delete_multiple_songs_path %>
+
+<%# Path to download an Excel with the songs %>
+<%= hidden_field_tag 'excel_songs_path' , excel_songs_path %>

@@ -1,0 +1,48 @@
+<% content_for :title, @album.name %>
+
+<h1><%= @album.name %></h1>
+
+<% if @album_songs.n_artists == 1
+    artist_id = @album_songs.songs_found[0][SongsSearch::IDX_ARTIST_ID]
+%>
+  <h2>Artist</h2>
+  <p>
+    <%= link_to @album_songs.songs_found[0][SongsSearch::IDX_ARTIST_NAME],
+      artist_path(artist_id) %>
+  </p>
+  <p style="text-align: center">
+    <%# Artist image %>
+    <%= render 'artists/artist_image' , { artist:Artist.find(artist_id) , size: :thumb ,
+      img_class: 'img_100' } %><br />
+  </p>
+<% end %>
+
+<% if @album.name != Album::UNKNOWN_ALBUM_NAME %>
+  <%= link_to edit_album_path(@album) , class:'btn btn-default' do %>
+    <span class="glyphicon glyphicon-edit"></span> Edit album
+  <% end %>
+<% end %>
+
+<h2>Songs (<%= @album_songs.songs_found.count %>)</h2>
+
+<%# Songs operations %>
+<p class="songs_ops_container">
+  <%= render 'shared/songs_table/operations' %>
+</p>
+
+<%# Album songs table %>
+<%= render 'shared/songs_table/table' , { id: 'songs' ,
+  songs_set: @album_songs , show_artist: (@album_songs.n_artists!=1) ,
+  show_album: false , show_track: true } %>
+
+<%# Artist/album id %>
+<%= hidden_field_tag 'album_id' , @album.id %>
+
+<%# Songs locations %>
+<%= render 'shared/songs_locations' ,
+  { songs_set: @album_songs , settings: @settings } %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage( albumShowPage );
+<% end %>

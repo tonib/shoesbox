@@ -1,0 +1,31 @@
+<% content_for :title, 'Streaming play lists' %>
+<h1>Streaming play lists</h1>
+
+<%# General operations %>
+<p>
+  <%= link_to new_play_list_path , class:'btn btn-default' do %>
+    <span class="glyphicon glyphicon-plus"></span> New play list
+  <% end %>
+</p>
+
+<table id="playlists" class="table" style="width:100%">
+  <thead>
+    <tr>
+      <th style="width:100%">Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @play_lists.each do |p| %>
+      <tr>
+        <td><%= p.name  %></td>
+        <td>
+          <% if p.name != PlayList::REPRODUCTION_QUEUE_NAME %>
+            <%= link_to edit_play_list_path(p) , class: 'btn btn-default' do %>
+              <span class="glyphicon glyphicon-edit"></span>
+            <% end %>
+          <% end %>
+        </td>
+    <% end %>
+  </tbody>
+</table>

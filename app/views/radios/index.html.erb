@@ -1,0 +1,16 @@
+<% content_for :title, 'Radios' %>
+<h1>Radios (<%= @radios.length %>)</h1>
+
+<%# General operations %>
+<p>
+  <%= link_to new_radio_path , class:'btn btn-default' do %>
+    <span class="glyphicon glyphicon-plus"></span> New radio
+  <% end %>
+
+  <%= link_to create_spanish_radios_radios_path , class:'btn btn-default' ,
+    data: { confirm: 'Are you sure you want to create some spanish radios?' } do %>
+    <span class="glyphicon glyphicon-plus"></span> Create some spanish radios
+  <% end %>
+</p>
+
+<%= render 'table' , { show_edit: true } %>

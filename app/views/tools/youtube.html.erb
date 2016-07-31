@@ -1,0 +1,60 @@
+<% content_for :title, 'Get audio from YouTube' %>
+<h1>Get audio from YouTube</h1>
+
+<%= render 'shared/form_messages' , { messages: @errors } %>
+
+<p><a href="http://youtube.com" target="_blank">
+  Youtube site
+</a></p>
+
+<%= form_tag get_youtube_tools_path do %>
+
+  <div class="form-group">
+    <%= label_tag :url , 'YouTube url' , class: 'control-label' %>
+    <%= text_field_tag :url , @url , class: 'form-control' , placeholder: 'Youtube URL to download, ex: http://www.youtube.com/watch?v=8N_tupPBtWQ'%>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :song_name , 'Song name' , class: 'control-label' %>
+    <%= text_field_tag :song_name , @song_name , class: 'form-control' , placeholder: 'Song name' %>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :artist_name , 'Artist name' , class: 'control-label' %>
+    <%= text_field_tag :artist_name , @artist_name , class: 'form-control' , placeholder: 'Optional, the artist name' %>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :album_name , 'Album name' , class: 'control-label' %>
+    <%= text_field_tag :album_name , @album_name , class: 'form-control' , placeholder: 'Optional, the album name' %>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :track , 'Track number' , class: 'control-label' %>
+    <%= text_field_tag :track , @track , class: 'form-control' , placeholder: 'Optional, the album track number' %>
+  </div>
+
+  <%= submit_tag 'Download song' , class: 'btn btn-primary' %>
+
+<% end %>
+
+<% if @song %>
+  <p>
+    New song: <%= link_to @song , @song %>
+  </p>
+<% end %>
+
+<% if @response %>
+<p><pre>
+<%= @response %>
+</pre></p>
+<% end %>
+
+<%# Paths to suggest artists and albums names %>
+<%= hidden_field_tag('suggest_artists_path' , suggest_artists_path ) %>
+<%= hidden_field_tag('suggest_albums_path' , suggest_albums_path ) %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage(youtubePage);
+<% end %>

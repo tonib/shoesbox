@@ -1,0 +1,93 @@
+<a id="top"></a>
+
+<p style="text-align: center">
+
+  <%# Play list selector %>
+  <%= select_tag "play_lists" ,
+    options_from_collection_for_select(@play_lists, :id , :name , @play_list_id ) ,
+    class: 'form-control' ,
+    autocomplete: "off"
+  %><br/>
+
+  <%# Player buttons %>
+  <%= render 'player_buttons' %>
+</p>
+
+<%# Volume %>
+<div>
+  <span class="glyphicon glyphicon-volume-up"></span>
+  <input id="volumeControl" data-slider-id='volumeSlider' type="text" data-slider-min="0"
+    data-slider-max="100" data-slider-step="1" data-slider-value="<%= @player_state.volume %>"
+    style="width:100%"/>
+</div>
+
+<%# Radio / song information %>
+<div class="well">
+  <%# This div is entirelly replaced each time the song info is updated %>
+  <div id="player">
+    <%= render 'player' %>
+  </div>
+  <% if @player_state.mode == PlayerState::SOURCE_FILE_SONGS %>
+    <%# The play slider %>
+    <input id="playSlider" data-slider-id='playSliderSlider' type="text" data-slider-min="0"
+      data-slider-max="100" data-slider-step="1" data-slider-value="0"
+      style="width:100%"/>
+  <% end %>
+</div>
+
+<%
+  puts "***2 #{@player_state.mode.inspect} , #{PlayerState::SOURCE_FILE_SONGS.inspect} , #{@player_state.mode == PlayerState::SOURCE_FILE_SONGS}"
+%>
+
+<% if @player_state.mode == PlayerState::SOURCE_FILE_SONGS %>
+  <%# Playing files %>
+
+  <% puts "*** Playing files" %>
+
+  <h2><%= @play_list.name %></h2>
+  <!-- Reproduction queue filter -->
+  <div id="queue_filter_div">
+    <%= render 'shared/songs_filter/form' , { id: :queue , :songs_set => @queue_songs } %>
+  </div>
+  <!-- Reproduction queue operations -->
+  <div class="songs_ops_container sticky_ops" id="songs_ops_container">
+    <%# Table operations %>
+    <%= render 'shared/songs_table/operations' , { add_to_queue: false , show_delete: false } %>
+    <a href="#" id="remove_songs_queue" class="btn btn-warning" title="Remove songs from the play list">
+      <span class="glyphicon glyphicon-remove"></span>
+      <span class="hidden-xs">Remove</span>
+    </a>
+  </div>
+  <!-- Reproduction queue songs table -->
+  <div id="queue_table_div">
+    <%= render 'shared/songs_table/table' , { id: :queue , songs_set: @queue_songs } %>
+  </div>
+
+<% else %>
+
+<% puts "*** Playing radio" %>
+
+  <%# Playing radio %>
+  <h2>Radios</h2>
+  <%= render 'radios/table' %>
+<% end %>
+
+<%# Load the next page of songs %>
+<%= hidden_field_tag('load_page' , load_page_player_path ) %>
+
+<%# Path to execute music commands with a get %>
+<%= hidden_field_tag('music_cmd_path' , music_cmd_player_path ) %>
+
+<%# Path to execute music commands with a post %>
+<%= hidden_field_tag('music_cmd_post_path' , music_cmd_post_player_path ) %>
+
+<%# Path to create a new play list %>
+<%= hidden_field_tag('new_play_list_path' , new_play_list_path ) %>
+
+<%# Path to change the play list %>
+<%= hidden_field_tag('change_play_list_player_path' , change_play_list_player_path ) %>
+
+<%# Initialize the page %>
+<script>
+  pageState.setPage(playerPage);
+</script>

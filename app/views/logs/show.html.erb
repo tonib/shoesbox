@@ -1,0 +1,27 @@
+<% content_for :title, @log.title %>
+
+<h1>Log</h1>
+
+<dl>
+
+  <dt>Title</dt>
+  <dd>
+    <%= @log.title %>
+  </dd>
+
+  <dt>Date</dt>
+  <dd>
+    <%= @log.created_at %>
+  </dd>
+
+  <dt>Level</dt>
+  <dd>
+    <%= @log.level_to_s %>
+  </dd>
+
+  <dt>Details</dt>
+  <dd>
+    <pre><%= @log.details %></pre>
+  </dd>
+
+</dl>

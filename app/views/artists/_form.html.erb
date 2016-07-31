@@ -1,0 +1,59 @@
+<%= form_for @artist do |f| %>
+
+  <%= render 'shared/form_messages' , { messages: @artist.errors } %>
+
+  <div class="form-group">
+    <%= f.label :name , class: 'control-label' %>
+    <%= f.text_field :name , class: 'form-control' , maxlength: Constants::NAME_MAX_LENGTH %>
+  </div>
+
+  <%# Artist wikipedia page %>
+  <div class="form-group">
+
+    <%# Wikipedia links %>
+    <%= f.label :wikilink , class: 'control-label' do %>
+      <a href="#" class='link_label' target="_blank">Wikipedia link</a>
+      <a href="https://es.wikipedia.org/w/index.php?search=" target="_blank">
+        (<span class="glyphicon glyphicon-search"></span>)
+      </a>
+    <% end %>
+
+    <%# Wikipedia field %>
+    <div class="input-group">
+      <%# The text field %>
+      <%= f.text_field :wikilink , class: 'form-control' , maxlength: Constants::URL_MAX_LENGTH %>
+      <%# Dropdown %>
+      <div class="input-group-btn" id="wikisearch_drop">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" id="wikisearch_menu">
+          <li>
+            <a href="#" style="text-align:center">
+              <%= image_tag "ajax-loader-small.gif" %>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <%# Artist image edition %>
+  <%= render 'edit_image' , { wikipedia_search: true , instance: @artist } %>
+
+  <%= f.submit class: 'btn btn-primary' %>
+
+<% end %>
+
+<%# Path to search wikipedia %>
+<%= hidden_field_tag('search_wikipedia_artists_path' , search_wikipedia_artists_path ) %>
+
+<%# Path to get the wikipedia main image %>
+<%= hidden_field_tag('get_wikipedia_image_artists_path' , get_wikipedia_image_artists_path ) %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage(artistEditPage);
+<% end %>

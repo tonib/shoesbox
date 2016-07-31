@@ -1,0 +1,90 @@
+<% content_for :title, 'Songs with problems' %>
+<h1>Songs with problems</h1>
+
+<% if @repeated_songs.length > 0 %>
+  <h2>Duplicated songs (<%= @repeated_songs.sum { |song| song[3] } %>)</h2>
+
+  <table class="table">
+    <thead>
+      <th>Artist</th>
+      <th>Album</th>
+      <th>Song</th>
+      <th>Count</th>
+    </thead>
+    <tbody>
+      <% @repeated_songs.each do |song| %>
+        <tr>
+          <td><%= song[0] %></td>
+          <td><%= song[1] %></td>
+          <td><%= link_to song[2] , controller: :songs ,
+            text: "artist:" + song[0] + ";album:" + song[1] + ";song:" + song[2] %></td>
+          <td><%= song[3] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% if @repeated_no_album.length > 0 %>
+  <h2>Duplicated songs with no album (<%= @repeated_no_album.length %>)</h2>
+  <table class="table">
+    <thead>
+      <th>Artist</th>
+      <th>Song</th>
+      <th>Album</th>
+    </thead>
+    <tbody>
+      <% @repeated_no_album.each do |song| %>
+        <tr>
+          <td><%= song[0] %></td>
+          <td><%= link_to song[1] , controller: :songs ,
+            text: "artist:" + song[0] + ";song:" + song[1] %></td>
+          <td><%= song[2] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% if @short_songs.length > 0 %>
+  <h2>Short songs (<%= @short_songs.length %>)</h2>
+  <table class="table">
+    <thead>
+      <th>Artist</th>
+      <th>Album</th>
+      <th>Song</th>
+      <th>Length (seconds)</th>
+      <th>File size</th>
+    </thead>
+    <tbody>
+      <% @short_songs.each do |song| %>
+        <tr>
+          <td><%= song.artist.name %></td>
+          <td><%= song.album.name %></td>
+          <td><%= link_to song.name , song_path(song) %></td>
+          <td><%= song.seconds %></td>
+          <td><%= number_to_human_size(song.file_size) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% if @duplicated_artists.length > 0 %>
+  <h2>Duplicated artists</h2>
+  <table class="table">
+    <thead>
+      <th>Wikipedia link</th>
+      <th>Artist</th>
+    </thead>
+    <tbody>
+      <% @duplicated_artists.each do |artist| %>
+        <tr>
+          <td><%= link_to artist.wikilink , artist.wikilink,
+            target: '_blank' %></td>
+          <td><%= link_to artist.name , artist %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -1,0 +1,103 @@
+<% content_for :title, 'Edit songs' %>
+<h1>Edit songs</h1>
+
+<%= render 'shared/form_messages' , { messages: @errors } %>
+
+<%= form_tag update_multiple_songs_path do %>
+
+  <h2>General</h2>
+  <div class="form-group">
+    <%= label_tag :artist , 'Artist' , class: 'control-label' %>
+    <div class="checkbox">
+      <label>
+        <%= check_box_tag 'update_artist' , '1' , @update_artist %>
+        Update
+      </label>
+    </div>
+    <%= text_field_tag :artist , @artist_name , class: 'form-control' ,
+      maxlength: Constants::NAME_MAX_LENGTH %>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :album , 'Album' , class: 'control-label' %>
+    <div class="checkbox">
+      <label>
+        <%= check_box_tag 'update_album' , '1' , @update_album %>
+        Update
+      </label>
+    </div>
+    <%= text_field_tag :album , @album_name , class: 'form-control' ,
+      maxlength: Constants::NAME_MAX_LENGTH %>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag :genre , 'Genre' , class: 'control-label' %>
+    <div class="checkbox">
+      <label>
+        <%= check_box_tag 'update_genre' , '1' , @update_genre %>
+        Update
+      </label>
+    </div>
+    <%= text_field_tag :genre , @genre , class: 'form-control' ,
+      maxlength: Constants::NAME_MAX_LENGTH %>
+  </div>
+
+  <h2>Songs information</h2>
+  <p>
+    <a class="btn btn-default" id="assign_fields">
+      <span class="glyphicon glyphicon-tags"></span>
+      Try to assing fields from file names
+    </a>
+  </p>
+  <table class="table" id="songs_table">
+
+    <thead>
+      <tr>
+        <th>Track</th>
+        <th>Name</th>
+        <th><%# Operations %></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @songs.each do |song| %>
+        <%= fields_for "songs[]", song do |f| %>
+          <tr>
+            <td colspan="2" style="padding-bottom:0; ; border-top: none">
+              <label style="margin-bottom: 0">
+                <%= song.path %>
+              </label>
+              <%= render 'shared/form_messages' , { messages: song.errors } %>
+            </td>
+          </tr>
+          <tr>
+            <td style="border-top: none">
+              <%= f.number_field :track , class: 'form-control', style: 'width: 80px' %>
+            </td>
+            <td style="border-top: none; width: 100%">
+              <%= f.text_field :name , class: 'form-control' %>
+            </td>
+            <td style="border-top: none;" >
+              <%= link_to music_cmd_player_path( song_id: song.id , cmd: 'play_song' ) ,
+                remote: true, class:'btn btn-default' do %>
+                <span class="glyphicon glyphicon-play"></span>
+              <% end %>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+
+  </table>
+
+  <%= submit_tag 'Update songs' , class: 'btn btn-primary' %>
+
+<% end %>
+
+<%# Paths to suggest artists and albums names %>
+<%= hidden_field_tag('suggest_artists_path' , suggest_artists_path ) %>
+<%= hidden_field_tag('suggest_albums_path' , suggest_albums_path ) %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage(songEditPage);
+<% end %>

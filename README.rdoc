@@ -1,0 +1,135 @@
+= Shoesbox
+
+Shoesbox is an simple application to play and stream mp3 files and radio on a
+Raspberry Pi. <b>This project is buggy, unfinished and UNSUPPORTED.</b>
+
+== Features
+
+* Play MP3 files
+* Play internet radio
+* Play on speakers plugged to the Raspberry, or throught streaming on a
+  browser
+* MP3 files organizer
+* Allow to get winamp playlists to the MP3 files on the Raspberry.
+  The files are shared with Samba
+* The player can be controlled with a web interface, or with a numeric keypad
+  plugged to the Raspberry
+
+== Why you should not try this
+
+I did this to learn Ruby / Rails, and, well, to have a music player. As a
+first project to learn a new language, it should be throw away, but it works
+for me. If you are looking for a good music player, keep searching:
+
+* It's not finished (and probably it will never be)
+* It lacks basic functions of any music player
+* It's all itself an entire security hole: The rail server runs as root,
+  it runs mpg321 as root
+
+== How it does work
+
+It runs two processes:
+
+* A ruby process to play on the raspberry speakers and handle a keypad for
+  manual operation
+* A Rails app to control remotelly the player, serve streaming
+
+The music on the speakers is played with mpg321
+
+== Set up
+
+An uncomplete guide to setup the project:
+
+=== Raspberry
+
+* Get a Raspberry Pi 2
+* Install Raspbian on the Raspberry
+
+=== Install prerequisites
+
+Setup Ruby v2.2.2 (with RBENV) / Rails v4.2.1 / MySql (check
+https://gorails.com/setup/ubuntu/14.04)
+
+Install samba
+
+Install rmagick (for images handling):
+  sudo apt-get install libmagickwand-dev imagemagick
+
+Install mpg321
+
+Install espeak
+
+Install taglib-ruby
+  sudo apt-get install libtag1-dev
+
+Install zip
+  sudo apt-get install zip
+
+For youtube-dl (curl -L for redirections: TODO: print the new address (security) )
+  sudo apt-get install ffmpeg
+  sudo curl -L https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
+  sudo chmod a+rx /usr/local/bin/youtube-dl
+
+=== Setup Gems
+
+  cd [application_directory]
+  # Install gems
+  bundle install
+
+=== Setup MySql database
+
+Login on mysql as root, and create the application user:
+  mysql shoesbox -u root -p
+  CREATE USER 'shoesbox'@'localhost' IDENTIFIED BY 'shoesbox';
+  GRANT ALL PRIVILEGES ON * . * TO 'shoesbox'@'localhost';
+  FLUSH PRIVILEGES;
+
+Create the database:
+  cd [application_directory]
+  rake db:create RAILS_ENV="production"
+  rake db:migrate RAILS_ENV="production"
+
+=== Services setup
+
+Edit the files music_daemon and rails_daemon on
+[application_directory]/bin to set the right USER, APP_FILE and
+APP_DIR variables.
+
+Create the services:
+  cd /etc/init.d/
+  sudo ln -s [application_directory]/bin/music_daemon
+  sudo update-rc.d music_daemon defaults
+  sudo ln -s [application_directory]/bin/rails_daemon
+  sudo update-rc.d rails_daemon defaults
+
+With this, the speakers player and the rails daemon will be started when
+Raspberry is booted. To start / stop the services:
+
+  sudo /etc/init.d/rails_daemon [ start | stop ]
+  sudo /etc/init.d/music_daemon [ start | stop ]
+
+To run the services on the console, not as daemon, to debug errors:
+  cd [application_directory]
+  ruby lib/music/music_daemon.rb run
+  rails server -e production --binding=0.0.0.0 -p 80
+
+=== Shoesbox settings
+
+On the browser, go to "/setting/edit", and set the configuration:
+
+[Music path]  Path on Raspberry file system where the MP3 files are stored
+[Music trashcan folder] Path on Raspberry file system where the MP3 files
+                        will be moved when they are "deleted"
+[Youtube downloaded songs destination]  Path on Raspberry file system where
+                                        are stored the downloaded MP3 files
+[Shared folder]   UNC path for the Samba shared folder corresponding to the
+                  "Music path" directory
+
+[Speech command line] Command line used to speach texto on the Raspberry
+                      speakers
+[Initial message] Text speaked on the Raspberry speakers when it's booted
+[Wikipedia host]  Wikipedia hostname used to fetch an image for the artists
+[Wikipedia artist image selector] HTML selector to fetch the artists images
+                                  on the wikipedia page
+[Keypad device]   Device of the keypad to control the player. Set empty if you
+                  don't have a keypad

@@ -1,0 +1,6 @@
+
+<%# Set the image url %>
+$('#new_image_url').val( '<%= escape_javascript( @wikipedia_image_url ) %>');
+
+<%# Fire the change event %>
+$('#new_image_url').change();

@@ -1,0 +1,23 @@
+<% @albums.each do |album| %>
+  <tr>
+    <td class="selection_column">
+      <input type="checkbox" class="selection"
+        data-albumid="<%= album[0] %>" />
+    </td>
+    <td><%= link_to album[1] , album_path( album[0] ) %></td>
+    <% if album[2] == 1 %>
+      <td><%= link_to album[4] , artist_path( album[5] ) %></td>
+    <% else %>
+      <td><%= "Various (#{album[2]})" %></td>
+    <% end %>
+    <td class="hidden-xs"><%= album[3] %></td>
+  </tr>
+<% end %>
+
+<% if @albums.length == AlbumsController::PAGE_SIZE %>
+  <tr class="load_more_class" aria-page-index="<%= params[:page_index]%>" >
+    <td colspan="4" style="text-align: center">
+      <%= image_tag "ajax-loader-small.gif" %>
+    </td>
+  </tr>
+<% end %>

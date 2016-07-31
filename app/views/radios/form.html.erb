@@ -1,0 +1,45 @@
+<% content_for :title, 'Edit radio ' + ( @radio.name ? @radio.name : '' ) %>
+<h1>Radio</h1>
+
+<%= render 'shared/form_messages' , { messages: @radio.errors } %>
+
+<%= form_for @radio do |f| %>
+
+  <div class="form-group">
+    <%= f.label :name , class: 'control-label' %>
+    <%= f.text_field :name , class: 'form-control' ,
+      maxlength: Constants::NAME_MAX_LENGTH , placeholder: 'Radio name' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :streaming_url , class: 'control-label' %>
+    <%= f.text_field :streaming_url , class: 'form-control' ,
+      maxlength: Constants::URL_MAX_LENGTH , placeholder: 'Radio mp3 streaming URL' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :web_url , class: 'control-label' %>
+    <%= f.text_field :web_url , class: 'form-control' ,
+      maxlength: Constants::URL_MAX_LENGTH , placeholder: 'Radio web site URL. Optional' %>
+  </div>
+
+  <%# Radio image edition %>
+  <%= render 'artists/edit_image' , { instance: @radio } %>
+
+  <%= f.submit class: 'btn btn-primary' %>
+
+  <% if params[:action] != 'new' && params[:action] != 'create' %>
+    <%= link_to radio_path( @radio ) ,
+      method: :delete,
+      data: { confirm: 'Are you sure you want to delete the radio?' },
+      class: 'btn btn-danger' do %>
+      <span class="glyphicon glyphicon-remove"></span> Delete radio
+    <% end %>
+  <% end %>
+
+<% end %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage(radioEditPage);
+<% end %>

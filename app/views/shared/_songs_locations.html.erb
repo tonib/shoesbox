@@ -1,0 +1,29 @@
+<%#
+  Display the location of a set of songs on the shared folders
+  PARAMS:
+  settings: The applications settings (Setting class)
+  songs_set: The songs set to display (SongsSearch class)
+%>
+
+<h2>Songs location</h2>
+<table class="table" style="width:100%">
+  <thead>
+    <tr>
+      <th>Location</th>
+      <th>Number of songs</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% songs_set.get_shared_folders(@settings).each do |a| %>
+      <tr>
+        <% if a.length == 1 %>
+          <td colspan="2"><span class="breakable"><%= a[0] %></span></td>
+        <% else %>
+          <td><span class="breakable"><%= a[0] %></span></td>
+          <td><%= a[1] %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,38 @@
+<% @artists.each do |artist| %>
+  <tr>
+    <td class="selection_column">
+      <input type="checkbox" class="selection"
+        data-artistid="<%= artist.id %>" />
+    </td>
+    <td class="image_cell hidden-xs">
+      <%= render 'artist_image' ,
+        { artist: artist , show_cross: true , span_class: 'img_container' ,
+          images_list: @images_list } %>
+    </td>
+    <td class="vert_center">
+      <strong><%= link_to artist.name , artist_path(artist) %></strong><br/>
+      <span><%= artist.songs_count %> songs</span>
+    </td>
+    <td class="hidden-xs vert_center">
+      <%= link_to artist.wikilink, target: '_blank' do %>
+        <%= artist.wikilink %>
+      <% end %>
+    </td>
+    <td class="vert_center">
+      <% if artist.name != Artist::UNKNOWN_ARTIST_NAME %>
+        <%= link_to edit_artist_path(artist) , class: 'btn btn-default',
+          title: 'Edit artist' do %>
+          <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+
+<% if @artists.length == ArtistsController::PAGE_SIZE %>
+  <tr class="load_more_class" aria-page-index="<%= params[:page_index]%>" >
+    <td colspan="4" style="text-align: center">
+      <%= image_tag "ajax-loader-small.gif" %>
+    </td>
+  </tr>
+<% end %>

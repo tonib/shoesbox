@@ -1,0 +1,49 @@
+<%#
+  Renders a table with all radios
+  PARAMS:
+  show_edit: Show the edit button? Default is false
+%>
+
+<%
+  show_edit = false if local_assigns[:show_edit].nil?
+%>
+
+<table id="radios" class="table" style="width:100%">
+  <thead>
+    <tr>
+      <th class="hidden-xs">Image</th>
+      <th style="width:100%">Name</th>
+      <% if show_edit %>
+        <th></th>
+      <% end %>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @radios.each do |r| %>
+      <tr id="radio_<%= r.id %>">
+        <td class="image_cell hidden-xs">
+          <%= render 'artists/artist_image' ,
+            { artist: r , show_cross: true , span_class: 'img_container_small' ,
+              images_list: @images_list } %>
+        </td>
+        <td class="vert_center">
+          <%= link_to r.name, radio_path(r) %>
+        </td>
+        <% if show_edit %>
+          <td class="vert_center">
+            <%= link_to edit_radio_path(r) , class: 'btn btn-default' , title: 'Edit radio' do %>
+              <span class="glyphicon glyphicon-edit"></span>
+            <% end %>
+          </td>
+        <% end %>
+        <td class="vert_center">
+          <%= link_to music_cmd_player_path(
+            { cmd: :play_radio , radio_id: r.id } ), remote: true,
+            class: 'btn btn-default' , title: 'Play radio' do %>
+            <span class="glyphicon glyphicon-play"></span>
+          <% end %>
+        </td>
+    <% end %>
+  </tbody>
+</table>

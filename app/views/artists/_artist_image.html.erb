@@ -1,0 +1,43 @@
+<%#
+  PARAMS:
+  artist: The artist owner of the image
+  size: :thumb, :medium. Default is :thumb
+  show_cross: True if we should show a cross if the image is not available.
+    Default is false
+  link: If true, the image will link to the original image. Default is true
+  id: Id for the span image container. Optional
+  span_class: Class for the span image container
+  img_class: CSS class for the image
+  images_list: Cache with the files contained on the images directory. It can
+  be null
+%>
+<%
+
+  # Default values
+  link = true if local_assigns[:link].nil?
+  show_cross = false if local_assigns[:show_cross].nil?
+  size = :thumb if local_assigns[:size].nil?
+  id = nil if local_assigns[:id].nil?
+  span_class = nil if local_assigns[:span_class].nil?
+  img_class = nil if local_assigns[:img_class].nil?
+  images_list = nil if local_assigns[:images_list].nil?
+
+  # The image
+  image = artist.image_path(size, false, nil, images_list)
+  #image = nil
+%>
+<span <%=raw id ? "id=\"#{id}\"" : '' %> <%=raw span_class ? "class=\"#{span_class}\"" : '' %> >
+  <% if image && link %>
+    <a href="<%= artist.image_path(:medium, false, nil, images_list) %>" target="_blank">
+  <% end %>
+  <%
+    if image
+  %>
+    <%= image_tag image , class: img_class %>
+  <% elsif show_cross %>
+    <span class="glyphicon glyphicon-remove">
+  <% end %>
+  <% if image && link %>
+    </a>
+  <% end %>
+</span>

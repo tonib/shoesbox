@@ -1,0 +1,40 @@
+<%#
+  Renders a table of songs
+  PARAMS:
+  songs_set: The SongsSearch to render
+  id: The songs table id
+  show_artist: Show the artist column? Default is true
+  show_album: Show the album column? Default is true
+  show_track: Show the song track number? Default is false
+%>
+<%
+  show_artist = true if local_assigns[:show_artist].nil?
+  show_album = true if local_assigns[:show_album].nil?
+  show_track = false if local_assigns[:show_track].nil?
+%>
+
+<table class="table table-condensed" style="width:100%" id='<%= id %>'>
+  <thead>
+    <th class="selection_column">
+        <!--Selection-->
+        <input type="checkbox" class="select_all" />
+    </th>
+    <% if show_artist %>
+      <th>Artist</th>
+    <% end %>
+    <% if show_album %>
+      <th class="hidden-xs">Album</th>
+    <% end %>
+    <th>Song</th>
+    <th class="hidden-xs">Length</th>
+    <th><%# Operations column %></th>
+  </thead>
+
+  <tbody>
+    <%# Render songs rows %>
+    <%= render 'shared/songs_table/rows' ,
+      { songs_set: songs_set , show_artist: show_artist ,
+        show_album: show_album , show_track: show_track } %>
+  </tbody>
+
+</table>

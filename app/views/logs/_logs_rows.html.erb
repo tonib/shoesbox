@@ -1,0 +1,25 @@
+<% @logs.each do |l| %>
+  <tr>
+    <td>
+      <%= l.created_at %>
+    </td>
+    <td>
+      <%= l.level_to_s %>
+    </td>
+    <td>
+      <% if l.has_details? %>
+      <%= link_to l.title, l , class: 'breakable' %>
+      <% else %>
+        <%= l.title %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+
+<% if @logs.length == LogsController::PAGE_SIZE %>
+  <tr class="load_more_class" aria-page-index="<%= params[:page_index]%>" >
+    <td colspan="4" style="text-align: center">
+      <%= image_tag "ajax-loader-small.gif" %>
+    </td>
+  </tr>
+<% end %>

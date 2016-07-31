@@ -1,0 +1,89 @@
+- Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing
+- ERROR: When the web page is closed, the speaker player stops
+- Radio streaming:
+  * Add streaming errors handling
+  * Add audio events handling (buffering, etc)
+  * When playing streaming, if the download winamp pl is clicked, the streaming
+    stops
+- Android 5 / chrome: JS is not executed when the screen is locked
+- If you change radio too fast with keyboard, sometimes it hungs up
+- Keyboard: If you press back on radio, and the radios URL fails, it stills
+  on the same radio...
+- Suggestions: When an item on the list is clicked, the search should be
+  updated automatically
+- Refactoring (albums and artists, and others)
+  * Add JS class for filters forms
+  * Create class with common code for pagination and filter
+  * Create view for last row with "Load more" image
+- Check why Rock FM is not working on LSI device
+- Op to download radios as winamp playlist
+- Small player: Show it as affix only when scroll has been done
+- Change the select by click on row, to click on selection column only.
+  Try to center vertically the selection check box on the table row
+- Add volume control to small player
+- When a song is deleted on the album show, the page is not updated
+- Disable autocomplete on selection checks
+- Delete songs: Shows on the toast the number of songs deleted
+- When songs are deleted, the selection badge is not updated
+- Ops to sort and shuffle songs on the player
+- Allow add to queue and others from albums and artists page
+- Check soundcloud downloads
+- Check this:
+https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2
+- Check this: http://askubuntu.com/questions/135907/ripped-mp3-files-show-wrong-track-lengths
+  Add a tool to repair mp3 headers?
+- Check songs with wrong seconds length (too large or too short)
+- If you search a path, remove the prefixes (shared folder)
+- Play on speakers: If you let stopped the player an entire night, the next day
+  the play does nothing
+- Allow download youtube playlists
+- Smart: Scroll does not work if you click over the slider controls
+- Join player/music_cmd.js.erb and songs/music_cmd.js.erb on a single file
+- Add option to remove the artist image
+- Sometimes the ubs pendrive is not mounted, check why
+- The album should not contain the year (there are multiyear albums)
+- Download bootstrap documentation and rails guides
+- Upload project to github
+- Add agent info (nettiquete) when querying wikipedia
+- Add some kind of content qualification (better or worse songs, artists and
+  albums )
+- Allow same operations (edit, download, download playlist, add to queue) on songs page, queue
+  page, album view and view song
+- Add affix-es on top of page with the current playing song and edition
+  options
+- Move artists images folder outside of public folder, its rewritted by updates
+- Songs page: Refresh songs list when refresh available songs / clean db is
+  pressed
+- I got records on albums table with artist_id = null. Check db constraints...
+- Now all bootstrap JS is included. Add only the needed
+- Be sure #{Rails.public_path}/public/artists_images exists (meta_generation.rb)
+- ERROR speech: wait option is not working, never waits
+- When the music daemon executes an stop, the current playing song should be
+  stopped
+- Allow reordering on reproduction queue
+- Create a separated directory for production on development PC
+- Remove songs from queue: Keep the current songs filter
+- Play all random op. should be executed with the filter applied.
+- Store images for songs, albums and artists
+- Check if there is a better way to pass parameters to the player.js asset
+  than hidden fields
+- Format README.rdoc document
+- Add option to remove the current playing song
+- Play lists handling
+- Add a filter combo with the song folder?
+- Add rdoc documentation to the web UI
+- Show ellipsis ("...") on reproduction queue table if song names does not
+  fit. Now a scroll is added (ugly)
+- Support for genres
+- Save the artist image path on the artist record, for better performance
+- Edit multiple songs: Add field to set the song year
+- Allow copy file paths to clipboard
+- Move shoesbox executable to a different shared folder with authentication (security)
+- Multiartists songs
+- BUG: Chrome / Failed to load resource: net::ERR_CONTENT_LENGTH_MISMATCH with
+  songs larger than 4.5 minutes (all). It seems a probleme of puma (it does
+  not happen with Webrick)
+- Add multiple wikipedias sources: Ex. english and spanish
+- Configure wifi
+
+DONE ON THIS COMMIT:

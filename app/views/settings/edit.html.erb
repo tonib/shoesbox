@@ -1,0 +1,145 @@
+<% content_for :title, 'Settings' %>
+<h1>Settings</h1>
+
+<%= render 'shared/form_messages' , { messages: @setting.errors } %>
+
+<%= form_for @setting do |f| %>
+  <div class="form-group">
+    <%= f.label :music_dir_path , class: 'control-label' %><br>
+    <%= f.text_field :music_dir_path , class: 'form-control' ,
+      maxlength: Constants::PATH_MAX_LENGTH ,
+      placeholder: 'Directory where music is stored'%>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :trashcan_folder , 'Music trashcan folder' , class: 'control-label' %><br>
+    <%= f.text_field :trashcan_folder , class: 'form-control' ,
+    maxlength: Constants::PATH_MAX_LENGTH ,
+    placeholder: 'Directory where deleted song files are moved' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :youtube_folder , 'Youtube downloaded songs destination' , class: 'control-label' %><br>
+    <%= f.text_field :youtube_folder , class: 'form-control' , maxlength: 100 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :shared_folder , class: 'control-label' %><br>
+    <%= f.text_field :shared_folder , class: 'form-control' ,
+    maxlength: Constants::PATH_MAX_LENGTH ,
+    placeholder: 'UNC path of the shared folder where music is stored'%>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :speech_cmd , class: 'control-label' %><br>
+    <%= f.text_field :speech_cmd , class: 'form-control' , maxlength: 60,
+    placeholder: 'Command line to speach text. $TEXT is replaced by the text to speach' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :initial_message , class: 'control-label' %><br>
+    <%= f.text_field :initial_message , class: 'form-control' , maxlength: 200 ,
+    placeholder: 'Text to speach when player is started (ex. "Hello")' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :wikipedia_host , class: 'control-label' %><br>
+    <%= f.text_field :wikipedia_host , class: 'form-control' , maxlength: 100 ,
+    placeholder: 'Wikipedia host name (ex. es.Wikipedia.org)'%>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :image_selector , 'Wikipedia artist image selector' , class: 'control-label' %><br>
+    <%= f.text_field :image_selector , class: 'form-control' , maxlength: 100,
+    placeholder: 'CSS selector for artist image in wikipedia pages' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :keypad_device , class: 'control-label' %>
+    <div class="input-group">
+      <%= f.text_field :keypad_device , class: 'form-control' ,
+        placeholder: 'Keypad device (ex. "/dev/input/by-id/usb-05a4_USB_Compliant_Keypad-event-kbd")'%>
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <% @input_devices.each do |d| %>
+            <li><a href="#" class="keypad_link"><%= d %></a></li>
+          <% end %>
+        </ul>
+      </div><!-- /btn-group -->
+    </div><!-- /input-group -->
+  </div>
+
+  <%= f.submit 'Save' , class: 'btn btn-primary' %>
+<% end %>
+
+<h3>Speech</h3>
+<%= render 'shared/form_messages' , { messages: @speech_errors } %>
+<%= form_tag speech_setting_path do |f| %>
+
+  <div class="form-group">
+    <%= label_tag :speech_text , 'Text to speech' , class: 'control-label' %><br>
+    <%= text_field_tag :speech_text , '' , class: 'form-control',
+      placeholder: 'Texto to speech (ex. "Hello")'%>
+  </div>
+
+  <%= submit_tag 'Speech' , class: 'btn btn-primary' %>
+<% end %>
+
+<h3>Tools</h3>
+<p>
+  <%= link_to recalculate_metadata_setting_path , remote: true, type: 'script',
+    data: { confirm: 'Are you sure you want to clean meta info and recalculate it' } ,
+    class: 'btn btn-warning' do %>
+    <span class="glyphicon glyphicon-search"></span> Recalculate wikipedia links
+  <% end %>
+
+  <%= link_to start_music_service_setting_path , remote: true , type: 'script',
+    class: 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-play"></span> Start music service
+  <% end %>
+
+  <%= link_to stop_music_service_setting_path , remote: true , type: 'script',
+    class: 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-stop"></span> Stop music service
+  <% end %>
+
+  <%= link_to shutdown_setting_path , remote: true , type: 'script',
+    data: { confirm: 'Are you sure you want to shutdown the device?' } ,
+    class: 'btn btn-danger' do %>
+    <span class="glyphicon glyphicon-off"></span> Shutdown the device
+  <% end %>
+
+  <%= link_to mount_usb_drive_setting_path , remote: true , type: 'script',
+    class: 'btn btn-default' do %>
+    <span class="glyphicon glyphicon-import"></span> Mount /home/pi/compartida/musica/discousb
+  <% end %>
+
+  <%= link_to music_cmd_songs_path({ :cmd => :clean_db }) ,
+    data: { confirm: 'Are you sure you want to clean the songs database?' },
+    class:'btn btn-danger',
+    remote: true,
+    type: 'script' do %>
+    <span class="glyphicon glyphicon-refresh"></span> Rebuild songs database
+  <% end %>
+  
+</p>
+
+<h3>Disk and memory usage</h3>
+<pre>
+<%= @txt_disk_usage %>
+</pre>
+<pre>
+<%= @txt_memory_usage %>
+</pre>
+<pre>
+CPU temperature: <%= @temperature %>
+</pre>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage(settingsEditPage);
+<% end %>

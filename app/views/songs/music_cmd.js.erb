@@ -1,0 +1,26 @@
+
+try {
+  <% if @toast %>
+    <%# Display a toast with a message %>
+    toastr["<%= @toast.status %>"]( "<%= escape_javascript( @toast.info ) %>" );
+  <% end %>
+
+  <% if @songs %>
+    <%# Refresh the filter and songs table %>
+    var songs_table_data = <%=raw get_filter_changed_response.to_json %>;
+
+    if( songsIndexPage.songsFilter )
+      songsIndexPage.songsFilter.refreshWithData(songs_table_data);
+    else if( playerPage.queueFilter )
+      playerPage.queueFilter.refreshWithData(songs_table_data);
+  <% end %>
+
+  <% if @streaming_js_command %>
+    <%# Streaming javascript command %>
+    <%=raw @streaming_js_command %>
+  <% end %>
+  
+}
+catch(e) {
+  console.log(e);
+}

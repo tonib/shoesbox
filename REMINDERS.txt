@@ -1,0 +1,45 @@
+
+Database recreation:
+rake db:drop db:create db:migrate
+OR
+bin/recreatedb.sh
+
+Precompile assets:
+RAILS_ENV=production bin/rake assets:precompile
+
+Clean tmp directory:
+rake tmp:clear
+AND
+delete manually all the content of tmp/miniprofiler
+
+Zip app but artists images
+zip -r shoesbox.zip shoesbox -x shoesbox/public/artists_images/*
+
+To disable music services
+sudo update-rc.d rails_daemon disable
+sudo update-rc.d music_daemon disable
+
+To run the music player daemon on debug mode, and not as daemon:
+ruby lib/music/music_daemon.rb run -- -d
+
+To run the music player daemon on production mode, and not as daemon:
+ruby lib/music/music_daemon.rb run
+
+To run rails server on development, allowing remote connections:
+rails server --bind 0.0.0.0
+
+To generate documentation
+rdoc
+
+Repair broken cds
+# ddrescue -n -b2048 /dev/cdrom cdimage.img logfile.ddrescue
+# ddrescue -d -b2048 /dev/cdrom cdimage.img logfile.ddrescue
+(dvdisaster?, magicrescue?)
+
+Fix mpg321 bug with case sensitive http headers (needed for mpg321 v0.3.2)
+- Download sources from https://sourceforge.net/projects/mpg321/files/
+- Apply the patch (https://sourceforge.net/p/mpg321/patches/19/)
+- Build mpg321 from the source and install it
+
+Mysql console
+mysql shoesbox_development -u shoesbox -p

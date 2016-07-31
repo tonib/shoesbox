@@ -1,0 +1,83 @@
+<%#
+  Renders a set of song rows
+  PARAMS:
+  songs_set: The SongsSearch to render
+  show_artist: Show the artist column? Default is true
+  show_album: Show the album column? Default is true
+  show_track: Show the song track number? Default is false
+%>
+
+<%
+  show_artist = true if local_assigns[:show_artist].nil?
+  show_album = true if local_assigns[:show_album].nil?
+  show_track = false if local_assigns[:show_track].nil?
+
+  # For better performance, prepare the links previously:
+  song_play_link = "<a class=\"btn btn-default btn-xs\" href=\"#{music_cmd_player_path}?cmd=play_song&$PARAM=$SONG_ID\" data-remote=\"true\"><span class=\"glyphicon glyphicon-play\"></span></a>"
+  song_view_link = "<a class=\"breakable\" href=\"#{song_path(69)}\">$SONG_NAME</a>"
+  song_view_link = song_view_link.sub('69', '$SONG_ID')
+
+  artist_view_link = "<a href=\"#{artist_path(69)}\">$ARTIST_NAME</a>"
+  artist_view_link = artist_view_link.sub('69', '$ARTIST_ID')
+
+  album_view_link = "<a href=\"#{album_path(69)}\">$ALBUM_NAME</a>"
+  album_view_link = album_view_link.sub('69', '$ALBUM_ID')
+%>
+
+<% songs_set.each do |song| %>
+  <tr id="<%= songs_set.song_set_id(song) %>">
+    <td class="selection_column">
+      <input type="checkbox" id="chk_song_<%=
+        songs_set.is_playlist ? song[SongsSearch::IDX_PLAYLIST_ID] : song[SongsSearch::IDX_SONG_ID]
+       %>" class="selection" data-playlistid="<%= songs_set.play_list_song_id(song) %>"
+       data-songid="<%= song[SongsSearch::IDX_SONG_ID] %>" />
+    </td>
+    <% if show_artist %>
+      <td>
+        <%=raw artist_view_link
+          .sub('$ARTIST_ID' , song[SongsSearch::IDX_ARTIST_ID].to_s )
+          .sub('$ARTIST_NAME' , song[SongsSearch::IDX_ARTIST_NAME] ) %>
+      </td>
+    <% end %>
+    <% if show_album %>
+      <td class="hidden-xs">
+        <%=raw album_view_link
+          .sub('$ALBUM_ID' , song[SongsSearch::IDX_ALBUM_ID].to_s )
+          .sub('$ALBUM_NAME' , song[SongsSearch::IDX_ALBUM_NAME] ) %>
+      </td>
+    <% end %>
+    <td>
+      <%# Add a link target on the queue list %>
+      <% if songs_set.is_playlist %>
+        <a id="a_play_<%= song[SongsSearch::IDX_PLAYLIST_ID] %>"></a>
+      <% end %>
+      <%=raw song_view_link
+            .sub('$SONG_ID' , song[SongsSearch::IDX_SONG_ID].to_s )
+            .sub('$SONG_NAME' ,
+              ( show_track && song[SongsSearch::IDX_TRACK] > 0 ? song[SongsSearch::IDX_TRACK].to_s + '. ' : '' ) +
+                song[SongsSearch::IDX_SONG_NAME]
+            )
+      %>
+    </td>
+    <td class="hidden-xs"><%= Song::format_seconds_to_s(song[SongsSearch::IDX_SONG_LENGTH]) %></td>
+    <td>
+      <% if songs_set.is_playlist %>
+        <%=raw song_play_link
+          .sub('$PARAM' , 'play_list_song_id')
+          .sub('$SONG_ID' , song[SongsSearch::IDX_PLAYLIST_ID].to_s ) %>
+      <% else %>
+        <%=raw song_play_link
+          .sub('$PARAM' , 'song_id')
+          .sub('$SONG_ID' , song[SongsSearch::IDX_SONG_ID].to_s ) %>
+      <% end %>
+    </td>
+  </tr>
+<% end %>
+
+<% if songs_set.more_songs %>
+  <tr class="load_more_class" aria-page-index="<%= songs_set.page_index%>">
+    <td colspan="6" style="text-align: center">
+      <%= image_tag "ajax-loader-small.gif" %>
+    </td>
+  </tr>
+<% end %>

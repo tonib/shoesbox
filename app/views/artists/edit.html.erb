@@ -1,0 +1,26 @@
+<% content_for :title, "Edit artist " + @artist.name %>
+<h1>Edit artist</h1>
+<%= render 'form' %>
+
+<h3>Join to other artist</h3>
+<%=render 'shared/form_messages' , { messages: @join_errors } %>
+<p>
+  Use this function if this artist is duplicated. This will  move all songs from this artist to
+  the right one, and it will remove this artist.
+</p>
+<%= form_tag artist_join_path(@artist) do %>
+
+  <%= hidden_field_tag 'id' , @artist.id %>
+
+  <div class="form-group">
+    <label for="dest_artist_id">Destination artist</label>
+    <%= select_tag "dest_artist_id" ,
+      options_from_collection_for_select(@target_artists, :first , :last),
+      class: 'form-control' %>
+  </div>
+
+  <%= submit_tag 'Join artist' ,
+    data: { confirm: 'Are you sure you want to join the artist?' } ,
+    class: 'btn btn-danger' %>
+
+<% end %>

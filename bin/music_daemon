@@ -1,0 +1,50 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          music_daemon
+# Required-Start:    $all
+# Required-Stop:     $network $local_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts the music daemon server
+# Description:       Starts the music daemon server
+### END INIT INFO
+
+#####################
+# CONFIGURATION
+#####################
+
+# The user with RBENV
+USER=toni
+#USER=pi
+
+# The application ruby file entry
+APP_FILE=/home/toni/proyectos/AptanaWorkspace/shoesbox/lib/music/music_daemon.rb
+#APP_FILE=/home/pi/compartida/shoesbox/lib/music/music_daemon.rb
+
+# The ruby version to run
+RBENV_RUBY_VERSION=2.2.2
+
+#####################
+# CRAP
+#####################
+
+# Sometimes the usb pendrive is not mounted, (dirty?, i dont know)
+# Be sure it is mounted...
+mount /home/pi/compartida/musica/discousb
+
+#####################
+# WORK
+#####################
+
+# Configure ruby environment
+RBENV_ROOT="/home/$USER/.rbenv"
+PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+cd $APP_ROOT
+rbenv rehash
+rbenv local $RBENV_RUBY_VERSION
+
+# Run the command
+ruby $APP_FILE $1
+
+exit 0

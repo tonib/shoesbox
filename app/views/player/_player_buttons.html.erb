@@ -1,0 +1,52 @@
+<%#
+  Render player buttons
+  PARAMS:
+  compact: true to render on the page header. false to render on the player
+%>
+<%
+  compact = false if local_assigns[:compact].nil?
+  btn_style = compact ? 'btn btn-default btn-sm' : 'btn btn-default btn-lg'
+%>
+
+<%= link_to music_cmd_player_path( { :cmd => :start } ), remote: true ,
+  class: btn_style , title: 'Play' do %>
+  <span class="glyphicon glyphicon-play"></span>
+<% end %>
+
+<%= link_to music_cmd_player_path( { :cmd => :stop } ), remote: true ,
+  class: btn_style , title: 'Stop' do %>
+  <span class="glyphicon glyphicon-stop"></span>
+<% end %>
+
+<% if controller.player_state.mode == PlayerState::SOURCE_FILE_SONGS %>
+  <%= link_to music_cmd_player_path( { :cmd => :pause } ), remote: true,
+    class: btn_style , id: 'lnk_pause_player' , title: 'Pause' do %>
+    <span class="glyphicon glyphicon-pause"></span>
+  <% end %>
+<% end %>
+
+<%= link_to music_cmd_player_path( { :cmd => :previous } ), remote: true,
+  class: btn_style , title: 'Play previous' do %>
+  <span class="glyphicon glyphicon-step-backward"></span>
+<% end %>
+
+<%= link_to music_cmd_player_path( { :cmd => :next } ), remote: true,
+  class: btn_style  , title: 'Play next' do %>
+    <span class="glyphicon glyphicon-step-forward"></span>
+<% end %>
+
+<% if !controller.player_state.is_streaming? %>
+  <%# Button to refresh the player state. Only when playing on speakers %>
+  <%= link_to music_cmd_player_path( { :cmd => :refresh } ), remote: true,
+    class: btn_style , id: 'lnk_refresh_player',
+    title: 'Refresh player state' do %>
+    <span class="glyphicon glyphicon-refresh"></span>
+  <% end %>
+<% end %>
+
+<% if compact %>
+  <%# Scroll to top button %>
+  <a id="top_link" href="#top" class="<%= btn_style %>" title="Scroll to top">
+      <i class="glyphicon glyphicon-chevron-up"></i>
+  </a>
+<% end %>

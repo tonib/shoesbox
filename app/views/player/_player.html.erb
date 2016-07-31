@@ -1,0 +1,60 @@
+
+<div>
+  <% if @player_state.playing? %>
+    <div>
+      <dl style="margin-bottom:0">
+        <% if @player_state.mode == PlayerState::SOURCE_FILE_SONGS %>
+          <%# Artist image %>
+          <div style="float: right">
+            <%= render 'artists/artist_image' ,
+              { artist: @current_song.artist , span_class: 'img_container' } %>
+          </div>
+          <%# Song information %>
+
+            <dt>Artist</dt>
+            <dd>
+              <%= link_to @current_song.artist.name , artist_path(@current_song.artist) %>
+            </dd>
+
+            <dt>Album</dt>
+            <dd>
+              <%= link_to @current_song.album.to_s , album_path(@current_song.album) %>
+            </dd>
+
+            <dt>Song</dt>
+            <dd>
+              <%= link_to song_path(@current_song) , class: 'breakable' do %>
+                <%= @current_song.name %>
+              <% end %>
+            </dd>
+
+            </dd>
+            <dt>Duration</dt>
+            <dd>
+              <%= @current_song.seconds_to_s %> (Now playing <span class='now_playing'></span>)
+              <% if @player_state.paused %>
+                <strong>PAUSED</strong>
+              <% end %>
+            </dd>
+        <% else %>
+          <%# Radio info %>
+          <%# Radio image %>
+          <div style="float: right">
+            <%= render 'artists/artist_image' ,
+              { artist: @player_state.radio , span_class: 'img_container' } %>
+          </div>
+          <dt>Radio</dt>
+          <dd>
+            <%= link_to @player_state.radio.name, radio_path(@player_state.radio) %>
+          </dd>
+        <% end %>
+      </dl>
+    </div>
+
+    <%# Be sure the image does not overflow %>
+    <div style="clear:both"></div>
+
+  <% else %>
+    <p>Player stopped</p>
+  <% end %>
+</div>

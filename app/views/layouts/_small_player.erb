@@ -1,0 +1,65 @@
+<%# Be sure the player state is loaded %>
+<%
+  load_player_state
+%>
+
+<div class="navbar-right">
+  <%= render 'player/player_buttons' , { compact: true } %>
+</div>
+<div class="player_info">
+  <% if controller.player_state.playing? %>
+    <% if controller.player_state.mode == PlayerState::SOURCE_FILE_SONGS %>
+      <%# Playing a song %>
+      <span class="hidden-xs">
+        <%= link_to controller.current_song.artist.name , artist_path(controller.current_song.artist) %> /
+        <%= link_to controller.current_song.album.name , album_path(controller.current_song.album) %> /
+      </span>
+      <%= link_to controller.current_song.name,  song_path(controller.current_song) %>
+      (<span class='now_playing'></span>)
+    <% else %>
+      <%# Playing radio %>
+      <span>
+        <%= link_to controller.player_state.radio.name,
+          radio_path(controller.player_state.radio) %>
+      </span>
+    <% end %>
+  <% end %>
+</div>
+
+<% if controller.player_state.playing? %>
+  <%# Start play time / last pause time, only for phisical play (not streaming) %>
+  <%= hidden_field_tag('start_time' , controller.player_state.play_start_to_j ) %>
+
+  <%# Current time on the server, only for phisical play (not streaming) %>
+  <%= hidden_field_tag('now_on_server' , PlayerState.now_on_server_to_j ) %>
+
+  <%# Elapsed time for the last pause, only for phisical play (not streaming) %>
+  <%= hidden_field_tag('seconds_offset' , controller.player_state.seconds_offset ) %>
+
+  <%# True if the play is paused %>
+  <%= hidden_field_tag('paused' , controller.player_state.paused ) %>
+
+  <% if controller.current_song %>
+    <%# Song length in seconds %>
+    <%= hidden_field_tag('song_seconds' , controller.current_song.seconds ) %>
+  <% end %>
+<% end %>
+
+<%# The player mode %>
+<%= hidden_field_tag('play_mode' ,
+  ( controller.player_state.mode == PlayerState::SOURCE_FILE_SONGS ? "SONGS" : "RADIO" ) ) %>
+
+<% if controller.player_state.mode == PlayerState::SOURCE_FILE_SONGS &&
+      controller.player_state.play_list_song %>
+  <%# Id of the current PlayListSong %>
+  <%= hidden_field_tag('playsong_id' , controller.player_state.play_list_song.id ) %>
+<% end %>
+
+<% if controller.player_state.mode == PlayerState::SOURCE_RADIO &&
+      controller.player_state.radio %>
+  <%# Id of the current Radio %>
+  <%= hidden_field_tag('radio_id' , controller.player_state.radio.id ) %>
+<% end %>
+
+<%# True if we are playing streaming %>
+<%= hidden_field_tag('is_streaming' , controller.player_state.is_a?(PlayerStateStreaming) ) %>

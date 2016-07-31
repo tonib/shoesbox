@@ -1,0 +1,94 @@
+<% content_for :title, @artist.name %>
+
+<h1><%= @artist.name %></h1>
+
+<p style="text-align: center">
+  <%= render 'artists/artist_image' , { artist: @artist , size: :medium ,
+    img_class: 'img_100' } %>
+</p>
+
+<% if @artist.wikilink %>
+  <p style="text-align: center">
+    <%= link_to @artist.wikilink , @artist.wikilink , target: '_blank' %>
+  </p>
+<% end %>
+
+<% if @artist.name != Artist::UNKNOWN_ARTIST_NAME %>
+
+  <p style="text-align: center">
+    <%= link_to @artist.youtube_url , @artist.youtube_url , target: '_blank' %>
+  </p>
+
+  <%= link_to edit_artist_path(@artist) , class:'btn btn-default' do %>
+    <span class="glyphicon glyphicon-edit"></span> Edit artist
+  <% end %>
+
+<% end %>
+
+<%# Display artist albums %>
+<%
+  artist_albums = @artist_songs.songs_by_album
+  if artist_albums.count > 1
+%>
+  <h2>Albums (<%= artist_albums.count %>)</h2>
+  <%# Table operations %>
+  <p class="songs_ops_container">
+    <%= render 'shared/songs_table/operations' ,
+      { show_edit: false , show_delete: false , show_download: false ,
+        show_excel: false , ids_prefix: 'album_' } %>
+  </p>
+  <table class="table table-condensed" style="width:100%" id="albums">
+    <thead>
+      <th class="selection_column">
+          <!--Selection-->
+          <input type="checkbox" class="select_all" />
+      </th>
+      <th>Album</th>
+      <th class="hidden-xs">N. songs</th>
+    </thead>
+      <% artist_albums.each do |album_info| %>
+        <tr>
+          <td class="selection_column">
+            <input type="checkbox" class="selection"
+              data-albumid="<%= album_info[0] %>" />
+          </td>
+          <td>
+            <%= link_to album_info[1], album_path(album_info[0]) %>
+          </td>
+          <td class="hidden-xs">
+            <%= album_info[2] %>
+          </td>
+        </tr>
+      <% end %>
+    <tbody>
+    </tbody>
+  </table>
+<% end %>
+
+
+<h2>Songs (<%= @artist_songs.songs_found.count %>)</h2>
+
+<%# Songs operations %>
+<p class="songs_ops_container">
+  <%= render 'shared/songs_table/operations' %>
+</p>
+
+<%# Artist songs table %>
+<%= render 'shared/songs_table/table' , { id: 'songs' , songs_set: @artist_songs , show_artist: false } %>
+
+<%# Songs locations %>
+<%= render 'shared/songs_locations' ,
+  { songs_set: @artist_songs , settings: @settings } %>
+
+<%# Artist id %>
+<%= hidden_field_tag 'artist_id' , @artist.id %>
+
+<%# Paths to add albums songs to queue %>
+<%= hidden_field_tag('add_to_queue_albums_path' , add_to_queue_albums_path ) %>
+<%# Paths to download albums playlist %>
+<%= hidden_field_tag('download_playlist_albums_path' , download_playlist_albums_path ) %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage( artistShowPage );
+<% end %>

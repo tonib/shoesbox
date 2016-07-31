@@ -1,0 +1,6 @@
+try {
+  toastr["<%= @result.status %>"]( "<%= escape_javascript( @result.info ) %>" );
+}
+catch(e) {
+  console.log(e);
+}

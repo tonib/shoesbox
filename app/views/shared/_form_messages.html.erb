@@ -1,0 +1,37 @@
+<%#
+  PARAMS:
+  messages: Messages to render. If can be an active record Errors class, or
+    an collection of strings, or a CmdResult
+%>
+
+<% if messages %>
+
+  <%
+    # Normalize messages from source
+    if messages.is_a?( CmdResult )
+      are_errors = ( messages.status == :error )
+      display_messages = [ messages.info ]
+    elsif messages.is_a?( ActiveModel::Errors )
+      are_errors = true
+      display_messages = messages.full_messages
+    else
+      # Collection of strings
+      are_errors = false
+      display_messages = messages
+    end
+  %>
+
+  <% if display_messages.length > 0 %>
+    <% if are_errors %>
+      <h4>Errors</h4>
+    <% end %>
+    <div class="alert alert-<%= are_errors ? 'danger' : 'success' %>" role="alert">
+      <ul>
+        <% display_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<% end %>

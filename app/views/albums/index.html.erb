@@ -1,0 +1,64 @@
+<% content_for :title, 'Albums' %>
+<h1>Albums</h1>
+
+<form id="filter" data-turboform >
+  <%# The text search %>
+  <div class="form-group">
+    <div class="checkbox">
+      <label>
+        <%= check_box_tag "show_uncomplete" , "true" , params[:show_uncomplete] == "true" %>
+        Show  albums with less than 4 songs
+      </label>
+    </div>
+
+    <div class="input-group">
+      <input id="text_filter" name="text_filter"
+        type="text" class="form-control"
+        placeholder="Album or artist name" value="<%= params[:text_filter] %>"/>
+
+      <span class="input-group-btn">
+        <button id="search_button" class="btn btn-default" type="button" title="Do the search">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </span>
+    </div>
+  </div>
+</form>
+
+<%# Table operations %>
+<p class="songs_ops_container sticky_ops">
+  <%= render 'shared/songs_table/operations' ,
+    { show_edit: false , show_delete: false , show_download: false ,
+      show_excel: false , ids_prefix: 'album_' } %>
+</p>
+
+<table id="albums" class="table" style="width:100%">
+  <thead>
+    <tr>
+      <th class="selection_column">
+          <!--Selection-->
+          <input type="checkbox" class="select_all" />
+      </th>
+      <th>Album</th>
+      <th>Artist</th>
+      <th class="hidden-xs">N. songs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render 'album_rows' %>
+  </tbody>
+</table>
+
+<%# Path to load the next songs page %>
+<%= hidden_field_tag 'load_page_albums_path' , load_page_albums_path %>
+<%# Path to suggest names %>
+<%= hidden_field_tag('suggest_path' , suggest_albums_path ) %>
+<%# Paths to add albums songs to queue %>
+<%= hidden_field_tag('add_to_queue_albums_path' , add_to_queue_albums_path ) %>
+<%# Paths to download albums playlist %>
+<%= hidden_field_tag('download_playlist_albums_path' , download_playlist_albums_path ) %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage(albumsIndexPage);
+<% end %>

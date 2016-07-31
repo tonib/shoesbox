@@ -1,0 +1,14 @@
+<% content_for :title, 'Uep! Error!' %>
+<h1>Uep! Error!</h1>
+<p>
+  Some error has happened: <%= @error_message %>
+</p>
+<pre><%= @stack_trace %></pre>
+<p>
+  Meanwhile, relax and enjoy a cat picture:
+</p>
+<p style="text-align: center">
+  <a href="http://thecatapi.com">
+    <img src="http://thecatapi.com/api/images/get?format=src" class="img_100">
+  </a>
+</p>

@@ -1,0 +1,41 @@
+<% content_for :title, 'Songs' %>
+<h1>Songs (<%= @songs_count %>)</h1>
+
+<%# General operations %>
+<p>
+
+  <%= link_to music_cmd_songs_path({ :cmd => :queue_all_and_shuffle }) ,
+    data: { confirm: 'Are you sure you want to clean the queue and play all available songs shuffled?' },
+    class:'btn btn-default',
+    remote: true,
+    type: 'script' do %>
+    <span class="glyphicon glyphicon-play"></span> Play all random
+  <% end %>
+
+  <%= link_to music_cmd_songs_path({ :cmd => :rescan_music }) ,
+    class:'btn btn-default',
+    remote: true,
+    type: 'script' do %>
+    <span class="glyphicon glyphicon-refresh"></span> Refresh available songs
+  <% end %>
+
+</p>
+
+<%# The filter %>
+<%= render 'shared/songs_filter/form' , { id: 'songs' , songs_set: @songs , search_text: params[:text] } %>
+
+<%# Table operations %>
+<div class="songs_ops_container sticky_ops">
+  <%= render 'shared/songs_table/operations' %>
+</div>
+
+<%# Songs table %>
+<%= render 'shared/songs_table/table' , { id: 'songs' , songs_set: @songs } %>
+
+<%# Path to load the next songs page %>
+<%= hidden_field_tag 'load_page_path' , load_page_songs_path %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage( songsIndexPage );
+<% end %>

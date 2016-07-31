@@ -1,0 +1,52 @@
+<%#
+  Response for the execution of a music command
+%>
+try {
+  <% if @toast %>
+    toastr["<%= @toast.status %>"]( "<%= escape_javascript( @toast.info ) %>" );
+  <% end %>
+
+  <%# Update small player %>
+  $("#small_player")
+    .html("<%= escape_javascript( render partial: 'layouts/small_player' ) %>");
+
+  <%# Restart the song timer %>
+  if( smallPlayer.songTimer )
+    smallPlayer.songTimer.start();
+
+  if( pageState.getPageId() == 'playerPage' ) {
+
+    <%# Update player state %>
+    $("#player")
+      .html("<%= escape_javascript( render partial: 'player' ) %>");
+
+    <%# Paint the current playing song %>
+    playerPage.paintCurrentSong();
+
+    <%# Restart the song timer %>
+    if( playerPage.songTimer )
+      playerPage.songTimer.start();
+
+    <%# Set the current volume %>
+    playerPage.volume.setVolume( <%= @player_state.volume %> );
+
+    <% if @refresh_queue %>
+      <%# Refresh the reproduction queue %>
+      playerPage.queueFilter.refreshWithData(<%=raw get_filter_changed_response.to_json %>);
+    <% end %>
+
+    <%# If somebody else has switched between radio and mp3, refresh the entire
+        page %>
+    playerPage.checkModeChange();
+
+  }
+
+  <% if @streaming_js_command %>
+    <%# Streaming javascript command %>
+    <%=raw @streaming_js_command %>
+  <% end %>
+
+}
+catch(e) {
+  console.log(e);
+}

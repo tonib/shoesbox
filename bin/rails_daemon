@@ -1,0 +1,109 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          rails_daemon
+# Required-Start:    $all
+# Required-Stop:     $network $local_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: The rails web server for the music player
+# Description:       The rails web server for the music player
+### END INIT INFO
+
+# Original from: https://gist.github.com/chenha0/5301883
+
+#####################
+# CONFIGURATION
+#####################
+
+# The user with RBENV
+USER=toni
+#USER=pi
+
+# The ruby version to run
+RBENV_RUBY_VERSION=2.2.2
+
+# The application directory
+APP_DIR=/home/toni/proyectos/AptanaWorkspace/shoesbox
+#APP_DIR=/home/pi/compartida/shoesbox/
+
+# The file with the server startup log
+LOG_FILE="/var/log/rails_daemon_startup.txt"
+
+#####################
+# WORK
+#####################
+
+# When the raspberry is shutdown, sometimes this file still:
+rm $APP_DIR/tmp/pids/server.pid
+
+# Configure ruby environment
+RBENV_ROOT="/home/$USER/.rbenv"
+PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+cd $APP_ROOT
+rbenv rehash
+rbenv local $RBENV_RUBY_VERSION
+
+. /lib/lsb/init-functions
+
+# The daemon startup command line. Change here here web port
+DAEMON_CMD="rails server -d -e production --binding=0.0.0.0 -p 80"
+# The startup real command line. Store the stderr / stdout to debug
+#STARTUP_CMD="$DAEMON_CMD | tee /var/log/rails_daemon_startup.txt"
+STARTUP_CMD="$DAEMON_CMD > $LOG_FILE 2>&1"
+
+# Start in daemon mode.
+start(){
+  log_daemon_msg "Starting music web server"
+	cd $APP_DIR
+	log_progress_msg
+	eval $STARTUP_CMD
+  cat $LOG_FILE
+	log_progress_msg
+	log_end_msg 0
+}
+
+# Stop daemon
+stop(){
+	log_daemon_msg "Stopping music web server"
+	RUBYPID=`ps aux | grep "$DAEMON_CMD" | grep -v grep | awk '{print $2}'`
+	log_progress_msg
+	if [ "x$RUBYPID" != "x" ]; then
+		kill -2 $RUBYPID
+	fi
+	log_end_msg 0
+}
+
+# Check if Redmine is running
+status(){
+	RUBYPID=`ps aux | grep "$DAEMON_CMD" | grep -v grep | awk '{print $2}'`
+	if [ "x$RUBYPID" = "x" ]; then
+		echo "* Server is not running"
+	else
+		echo "* Server is running"
+	fi
+}
+
+case "$1" in
+	start)
+		start
+		;;
+
+	stop)
+		stop
+		;;
+
+	status)
+		status
+		;;
+
+	restart|force-reload)
+		stop
+		start
+		;;
+
+	*)
+		echo "Usage: $0 {start|stop|restart|force-reload|status}"
+		exit 1
+
+esac

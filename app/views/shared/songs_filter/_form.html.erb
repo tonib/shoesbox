@@ -1,0 +1,38 @@
+
+<%#
+  PARAMS:
+  songs_set: The SongsSearch to render
+  id: The filter id
+  search_text: The default search text
+%>
+<%
+  search_text = nil if local_assigns[:search_text].nil?
+%>
+
+<form id="<%= id %>_filter">
+
+  <%# The text search %>
+  <div class="form-group">
+    <div class="input-group">
+
+      <% if @play_list %>
+        <%= hidden_field_tag('play_list_id' , @play_list.id ) %>
+      <% end %>
+
+      <input id="<%= id %>_filter_text" name="<%= id %>_text_filter"
+        type="text" class="form-control"
+        placeholder="Search for on artists, albums, song names or song paths..."
+        value = "<%= search_text %>" />
+
+      <span class="input-group-btn">
+        <button id="<%= id %>_search_button" class="btn btn-default" type="button" title="Do the search">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </span>
+    </div>
+  </div>
+
+</form>
+
+<%# Paths to suggest artists names %>
+<%= hidden_field_tag('suggest_path' , id == :queue ? suggest_player_path : suggest_songs_path ) %>

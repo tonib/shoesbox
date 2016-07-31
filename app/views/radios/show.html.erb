@@ -1,0 +1,33 @@
+<% content_for :title, @radio.name %>
+
+<h1><%= @radio.name %></h1>
+<p style="text-align: center">
+  <%= render 'artists/artist_image' , { artist: @radio , size: :medium ,
+    img_class: 'img_100' } %>
+</p>
+
+<dl>
+  <% if @radio.web_url && !@radio.web_url.empty? %>
+    <dt>Web URL</dt>
+    <dd>
+      <%= link_to @radio.web_url , @radio.web_url , target: '_blank' %>
+    </dd>
+  <% end %>
+
+  <dt>Streaming URL</dt>
+  <dd>
+    <%= link_to @radio.streaming_url, @radio.streaming_url, target: '_blank' %>
+  </dd>
+</dl>
+
+<%= link_to music_cmd_player_path(
+  { cmd: :play_radio , radio_id: @radio.id } ), remote: true,
+  class: 'btn btn-default' , title: 'Play radio' do %>
+  <span class="glyphicon glyphicon-play"></span>
+  <span class="hidden-xs">Play</span>
+<% end %>
+
+<%= link_to edit_radio_path(@radio) , class:'btn btn-default' do %>
+  <span class="glyphicon glyphicon-edit"></span>
+  <span class="hidden-xs">Edit</span>
+<% end %>

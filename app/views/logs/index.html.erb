@@ -1,0 +1,33 @@
+<% content_for :title, 'Log' %>
+<h1>Log</h1>
+
+<p>
+  <%= link_to clear_logs_path,
+    data: { confirm: 'Are you sure you want to clean the log?' },
+    class:'btn btn-danger', method: :post,
+    title: 'Remove all log records' do %>
+    <span class="glyphicon glyphicon-trash"></span>
+    <span class="hidden-xs">Clear log</span>
+  <% end %>
+</p>
+
+<table id="logs" class="table" style="width:100%" >
+  <thead>
+    <th>Date</th>
+    <th>Level</th>
+    <th>Description</th>
+  </thead>
+
+  <tbody>
+    <%= render 'logs_rows' %>
+  </tbody>
+
+</table>
+
+<%# Path to load the next page %>
+<%= hidden_field_tag 'load_page_logs_path' , load_page_logs_path %>
+
+<%# Initialize the page %>
+<%= javascript_tag do %>
+  pageState.setPage(logsIndexPage);
+<% end %>

@@ -1,0 +1,49 @@
+<%#
+  Edit an artist image
+  PARAM:
+  wikipedia_search: Show button to get the image from Wikipedia? Default is
+    false.
+  instance: The artist / radio to edit
+%>
+<%
+  wikipedia_search = false if local_assigns[:wikipedia_search].nil?
+%>
+
+<%# Image display %>
+<div class="form-group">
+  <label class="control-label">Image</label>
+  <div id="img_container" style="text-align: center">
+    <%= render 'artists/artist_image' ,
+      { artist: instance , size: :thumb , show_cross: true , id: 'artist_img'} %>
+  </div>
+</div>
+
+<%# Change image url %>
+<div class="form-group">
+
+  <%# Label %>
+  <label class="control-label" for="new_image_url">
+    <a href="#" class='link_label' target="_blank">New image URL</a>
+    <a id="search_img_lnk" href="http://www.google.com/search?tbm=isch"
+     target="_blank">
+      (<span class="glyphicon glyphicon-search"></span>)
+    </a>
+  </label>
+
+  <%# New image url %>
+  <% if wikipedia_search %>
+    <div class="input-group">
+      <%= text_field_tag 'new_image_url' , '' , class: 'form-control' ,
+        placeholder: 'Write a URL to change the image. Left empty to do not change the image' %>
+        <span class="input-group-btn">
+          <button id="wikipedia_img_btn" class="btn btn-default" type="button"
+           title="Try to get the artist image URL from Wikipedia">
+            Wikipedia</button>
+        </span>
+    </div>
+  <% else %>
+    <%= text_field_tag 'new_image_url' , '' , class: 'form-control' ,
+      placeholder: 'Write a URL to change the image. Left empty to do not change the image' %>
+  <% end %>
+
+</div>
