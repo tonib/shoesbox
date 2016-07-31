@@ -43,3 +43,6 @@ Fix mpg321 bug with case sensitive http headers (needed for mpg321 v0.3.2)
 
 Mysql console
 mysql shoesbox_development -u shoesbox -p
+
+github push
+git push -u origin master

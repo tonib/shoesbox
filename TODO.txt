@@ -1,3 +1,12 @@
+- The gears gif appears under the top affix. It should be above
+- Error: If there is no USB devices, the directory /dev/input/by-id does not
+  exists:
+  Message: No such file or directory @ dir_initialize - /dev/input/by-id
+  Class: Errno::ENOENT
+  /home/pi/compartida/shoesbox/app/controllers/settings_controller.rb:90:in `open'
+  /home/pi/compartida/shoesbox/app/controllers/settings_controller.rb:90:in `entries'
+  /home/pi/compartida/shoesbox/app/controllers/settings_controller.rb:90:in `render_edit'
+  /home/pi/compartida/shoesbox/app/controllers/settings_controller.rb:11:in `edit'
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing
 - ERROR: When the web page is closed, the speaker player stops
 - Radio streaming:
@@ -15,7 +24,6 @@
   * Add JS class for filters forms
   * Create class with common code for pagination and filter
   * Create view for last row with "Load more" image
-- Check why Rock FM is not working on LSI device
 - Op to download radios as winamp playlist
 - Small player: Show it as affix only when scroll has been done
 - Change the select by click on row, to click on selection column only.
@@ -43,7 +51,6 @@ https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2
 - Sometimes the ubs pendrive is not mounted, check why
 - The album should not contain the year (there are multiyear albums)
 - Download bootstrap documentation and rails guides
-- Upload project to github
 - Add agent info (nettiquete) when querying wikipedia
 - Add some kind of content qualification (better or worse songs, artists and
   albums )
