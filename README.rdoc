@@ -30,7 +30,7 @@ for me. If you are looking for a good music player, keep searching:
 
 It runs two processes:
 
-* A ruby process to play on the raspberry speakers and handle a keypad for
+* A Ruby process to play on the raspberry speakers and handle a keypad for
   manual operation
 * A Rails app to control remotelly the player, serve streaming
 
@@ -133,3 +133,25 @@ On the browser, go to "/setting/edit", and set the configuration:
                                   on the wikipedia page
 [Keypad device]   Device of the keypad to control the player. Set empty if you
                   don't have a keypad
+
+== Keypad usage
+
+* Key 7 = Switch between radio and MP3 files play
+* Key 0 = Stop
+* Key Enter = Play
+* Key "." = Pause
+* Key "+" = Increase volume 10%
+* Key "-" = Decrease volume 10%
+* Key "*" = Speak the current playing song / radio info
+* Key 2 = Play previous song / radio
+* Key 3 = Play next song / radio
+
+== Licenses
+
+Shoesbox is distributed under MIT License. It distributes the following
+software:
+
+* bootstrap-slider (Apache License)
+* jquery-ui (MIT license)
+* jquery-cookie (MIT license)
+* toastr (MIT license)

@@ -7,8 +7,21 @@
 */
 function autocomplete(selector, source_url)  {
   $(selector).autocomplete({
-    source: source_url
+
+    source: source_url,
+
+    select: function( event, ui ) {
+      var $field = $(selector);
+      // Set the input value
+      $field.val( ui.item.value );
+      // Submit the search form:
+      var $form = $field.closest('form');
+      if( $form.length > 0 )
+        $form.submit();
+    }
+    
   });
+
 }
 
 /**

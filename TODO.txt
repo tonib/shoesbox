@@ -10,8 +10,6 @@
 - If you change radio too fast with keyboard, sometimes it hungs up
 - Keyboard: If you press back on radio, and the radios URL fails, it stills
   on the same radio...
-- Suggestions: When an item on the list is clicked, the search should be
-  updated automatically
 - Refactoring (albums and artists, and others)
   * Add JS class for filters forms
   * Create class with common code for pagination and filter
