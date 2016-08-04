@@ -61,7 +61,7 @@
 
 <div class="container" role="main">
   <%# Ajax busy image %>
-  <%= image_tag "gears.gif" , style: 'display: none; z-index: 9999' , id: 'busy_img' %>
+  <%= image_tag "gears.gif" , style: 'display: none; z-index: 99999' , id: 'busy_img' %>
 
   <%# Path to execute music commands with a get. Required by streaming_player.js %>
   <%= hidden_field_tag('music_cmd_player_path' , music_cmd_player_path ) %>

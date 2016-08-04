@@ -1,4 +1,3 @@
-- The gears gif appears under the top affix. It should be above
 - On buttons to add songs to playlist, put the name of the playlist where it
   will be added
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing
