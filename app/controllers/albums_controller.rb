@@ -93,7 +93,7 @@ class AlbumsController < MusicBaseController
 
     # At the artist show page we can filter by the artist, so here is it:
     if params[:filter] && params[:filter][:artistid]
-      relation = relation.where( artist_id: params[:filter][:artistid] )
+      relation = relation.where( 'songs.artist_id' => params[:filter][:artistid] )
     end
 
     return relation
