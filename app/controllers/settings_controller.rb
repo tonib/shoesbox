@@ -86,9 +86,14 @@ class SettingsController < MusicBaseController
 
     # Available input devices:
     begin
-      @input_devices = Dir
-        .entries( '/dev/input/by-id' )
-        .select { |d| !File.directory?(d) }
+      devs_dir = '/dev/input/by-id'
+      if Dir.exists?(devs_dir)
+        @input_devices = Dir
+          .entries( devs_dir )
+          .select { |d| !File.directory?(d) }
+      else
+        @input_devices = []
+      end
     rescue
       Log.log_last_exception
       @input_devices = []

@@ -1,14 +1,6 @@
 - The gears gif appears under the top affix. It should be above
 - On buttons to add songs to playlist, put the name of the playlist where it
   will be added
-- Error: If there is no USB devices, the directory /dev/input/by-id does not
-  exists:
-  Message: No such file or directory @ dir_initialize - /dev/input/by-id
-  Class: Errno::ENOENT
-  /home/pi/compartida/shoesbox/app/controllers/settings_controller.rb:90:in `open'
-  /home/pi/compartida/shoesbox/app/controllers/settings_controller.rb:90:in `entries'
-  /home/pi/compartida/shoesbox/app/controllers/settings_controller.rb:90:in `render_edit'
-  /home/pi/compartida/shoesbox/app/controllers/settings_controller.rb:11:in `edit'
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing
 - Radio streaming:
   * Add streaming errors handling
