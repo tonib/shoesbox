@@ -1,4 +1,5 @@
-- When you press download songs, no progress appears on UI
+- Handle errors downloading files: Now no error is reported. Add a task for the zip execution
+- Fix problems with selection and refresh page / turbolinks cache
 - Add volume control to small player
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing
 - Radio streaming:
@@ -81,5 +82,6 @@ https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2
   not happen with Webrick)
 - Add multiple wikipedias sources: Ex. english and spanish
 - Configure wifi
+- Add rating songs system
 
 DONE ON THIS COMMIT:

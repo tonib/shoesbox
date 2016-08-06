@@ -58,15 +58,16 @@ SongsTableOps = function(table, tableChecks) {
     }
 
     var nSongs = that.tableChecks.getNSelectedSongs();
-    if( nSongs > 50 ) {
-      alert( 'The maximum nuber of songs to download is 50');
+    if( nSongs > 200 ) {
+      alert( 'The maximum nuber of songs to download is 200');
       return;
     }
 
-    Turbolinks.visit( $('#download_multiple_songs_path').val() + "?" +
-      $.param( that.tableChecks.getOperationParameters(ids) )
-    );
-
+    var url = $('#download_multiple_songs_path').val() + "?" +
+      $.param( that.tableChecks.getOperationParameters(ids) );
+    //Turbolinks.visit( url );
+    //window.open(url);
+    download_file( url , 'Downloading songs, this will take some time' );
   });
 
   // Download playlist
@@ -79,9 +80,14 @@ SongsTableOps = function(table, tableChecks) {
       return;
     }
 
-    Turbolinks.visit( $('#download_playlist_songs_path').val() + "?" +
+    /*Turbolinks.visit( $('#download_playlist_songs_path').val() + "?" +
       $.param( that.tableChecks.getOperationParameters(ids) )
-    );
+    );*/
+    var url = $('#download_playlist_songs_path').val() + "?" +
+      $.param( that.tableChecks.getOperationParameters(ids) );
+    //window.open(url);
+    //window.location.assign(url);
+    download_file( url , 'Downloading play list');
 
   });
 

@@ -9,7 +9,7 @@ class SongsController < MusicBaseController
   include SuggestModule
 
   # Maximum number of songs to download at the same time
-  MAX_DOWNLOAD_SONGS = 50
+  MAX_DOWNLOAD_SONGS = 200
 
   ###################################################
   # Actions
