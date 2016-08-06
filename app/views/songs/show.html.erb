@@ -70,16 +70,17 @@
 
 </dl>
 
+<% playlist_name = controller.current_player_state.play_list.name %>
 <%= link_to music_cmd_player_path( song_id: @song.id , cmd: 'play_song' ) ,
   remote: true, class:'btn btn-default' do %>
   <span class="glyphicon glyphicon-play"></span>
-  <span class="hidden-xs">Add to queue and Play</span>
+  <span class="hidden-xs">Add to '<%= playlist_name %>' and play</span>
 <% end %>
 
 <%= link_to add_to_queue_songs_path( song_ids: [ @song.id ] ) ,
   remote: true, class:'btn btn-default' do %>
   <span class="glyphicon glyphicon-plus"></span>
-  <span class="hidden-xs">Add to queue</span>
+  <span class="hidden-xs">Add to '<%= playlist_name %>'</span>
 <% end %>
 
 <%= link_to song_download_path( @song ) ,

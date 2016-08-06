@@ -1,5 +1,5 @@
-- On buttons to add songs to playlist, put the name of the playlist where it
-  will be added
+- When you press download songs, no progress appears on UI
+- Add volume control to small player
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing
 - Radio streaming:
   * Add streaming errors handling
@@ -18,7 +18,6 @@
 - Small player: Show it as affix only when scroll has been done
 - Change the select by click on row, to click on selection column only.
   Try to center vertically the selection check box on the table row
-- Add volume control to small player
 - When a song is deleted on the album show, the page is not updated
 - Disable autocomplete on selection checks
 - Delete songs: Shows on the toast the number of songs deleted

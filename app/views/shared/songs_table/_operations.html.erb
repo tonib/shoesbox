@@ -18,10 +18,11 @@
 %>
 
 <%if add_to_queue %>
+  <% playlist_name = controller.current_player_state.play_list.name %>
   <a id="<%= ids_prefix %>add_to_queue_btn" href="#" class="btn btn-default"
-    title="Add to the current playlist">
+    title="Add to '<%= playlist_name %>'">
     <span class="glyphicon glyphicon-plus"></span>
-    <span class="hidden-xs">Add to queue</span>
+    <span class="hidden-xs">Add to '<%= playlist_name %>'</span>
   </a>
 <% end %>
 <a id="<%= ids_prefix %>download_playlist_btn" href="#" class="btn btn-default"
