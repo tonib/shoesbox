@@ -1,4 +1,9 @@
-- Handle errors downloading files: Now no error is reported. Add a task for the zip execution
+- Handle errors downloading files: 
+  * On firefox, there is no notification of the current download
+  * Now no error is reported. 
+  * Add a task for the zip execution
+  * Handle duplicated file names
+  * Add folder for each album / artist
 - Fix problems with selection and refresh page / turbolinks cache
 - Add volume control to small player
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing

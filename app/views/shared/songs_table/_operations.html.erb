@@ -26,20 +26,20 @@
   </a>
 <% end %>
 <a id="<%= ids_prefix %>download_playlist_btn" href="#" class="btn btn-default"
-  title="Download songs as a Winamp playlist file (.m3u8)">
+  title="Download songs as a Winamp playlist file (.m3u8)" download>
   <span class="glyphicon glyphicon-list"></span>
   <span class="hidden-xs">WinAmp playlist</span>
 </a>
 <% if show_excel %>
   <a id="<%= ids_prefix %>download_excel_btn" href="#" class="btn btn-default"
-    title="Download Excel file with songs list">
+    title="Download Excel file with songs list" download>
     <span class="glyphicon glyphicon-th"></span>
     <span class="hidden-xs">Excel</span>
   </a>
 <% end %>
 <% if show_download %>
   <a id="<%= ids_prefix %>download_songs_btn" href="#" class="btn btn-default"
-    title="Download songs as Zip file">
+    title="Download songs as Zip file" download>
     <span class="glyphicon glyphicon-download"></span>
     <span class="hidden-xs">Download</span>
   </a>
