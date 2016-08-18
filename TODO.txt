@@ -1,7 +1,7 @@
-- Handle errors downloading files: 
-  * On firefox, there is no notification of the current download
-  * Now no error is reported. 
-  * Add a task for the zip execution
+- Use Shellwords.escape where shell commands are executed (youtube dl, mpg321,
+  etc, EVERYWHERE)
+- Handle errors downloading files:
+  * Now no error is reported.
   * Handle duplicated file names
   * Add folder for each album / artist
 - Fix problems with selection and refresh page / turbolinks cache
