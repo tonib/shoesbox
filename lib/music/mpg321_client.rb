@@ -164,7 +164,7 @@ class Mpg321Client
       begin
         puts "Killing files player PID #{@wait_thr.pid()}"
         pid = @wait_thr.pid()
-        #Process.kill( 9 , pid ) # SIGKILL (go fuck yourself, the hardcore way)
+        #Process.kill( 9 , pid ) # SIGKILL (the hardcore way)
         Process.kill( 15 , pid ) # SIGTERM (please quit, the polite way)
         puts "Waiting for PID #{pid}"
         Process.waitpid( pid )  # Avoid zombies

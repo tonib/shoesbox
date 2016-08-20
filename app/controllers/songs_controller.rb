@@ -209,60 +209,30 @@ class SongsController < MusicBaseController
       raise Exception.new("Maximum number of songs to download is #{MAX_DOWNLOAD_SONGS}")
     end
 
-    # Get a temp file name
-    # temp_file = Tempfile.new(['songs', '.zip'])
-    # temp_file.close
-    #
-    # # Create a zip file with songs
-    # result = create_zip_file( songs_paths , temp_file.path )
-    # if result.status == :error
-    #   raise "Zip failed: " + result.info
-    # end
-    #
-    # # Send the file
-    # file_name = selection_file_name(:songid) + '.zip'
-    # File.open(temp_file.path, 'r') do |f|
-    #   send_data f.read, type: 'application/zip' , filename: file_name
-    # end
-    #
-    # # Delete the file
-    # temp_file.unlink
-
     # Get the pipe of the zip sdt output
     io = create_zip_file_popen( songs_paths )
     zip_pid = io.pid
     file_name = selection_file_name(:songid) + '.zip'
 
-    # Write the output (DOES NOT WORK)
-    # send_data io.read, type: 'application/zip' ,
-    #   filename: file_name, stream: true
-
     self.content_type = 'application/zip'
     self.response.headers['Content-Disposition'] =
       "attachment; filename=\"#{file_name}\""
-    #self.response_body = io (DOES NOT WORK)
 
-    # It does WOOOORK (hallelujah!)
+    # Stream the zip, to avoid delay and memory wasting
     begin
-
       # Write chunks of the zip file
       chunk_size = 2**20 * 4  # 4 MB
       until io.eof?
         response.stream.write( io.read( chunk_size ) )
       end
-
     rescue
-
-      # Ups
-      Log.log_last_exception
-
-      # Ensure zip is killed
+      # Client disconnected is ok, don't log it
+      Log.log_last_exception if ! $!.is_a?( ActionController::Live::ClientDisconnected )
+      # Ensure zip execution is finished
       begin
-        Process.kill( 15 , zip_pid ) # SIGTERM (please quit, the polite way)
-        Process.waitpid( zip_pid )  # Avoid zombies
+        io.close
       rescue
       end
-
     ensure
       # Ensure the stream is closed
       response.stream.close

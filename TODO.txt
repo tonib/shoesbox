@@ -4,6 +4,7 @@
   * Now no error is reported.
   * Handle duplicated file names
   * Add folder for each album / artist
+  * Downloads are relaunched when the page is reloaded from browser cache
 - Fix problems with selection and refresh page / turbolinks cache
 - Add volume control to small player
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing
