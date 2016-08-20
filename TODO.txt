@@ -1,9 +1,11 @@
+- Handle audio when playing radio on speakers: With alsa mixer?
 - Use Shellwords.escape where shell commands are executed (youtube dl, mpg321,
   etc, EVERYWHERE)
 - Handle errors downloading files:
   * Now no error is reported.
   * Handle duplicated file names
   * Add folder for each album / artist
+  * Exceptions with streaming closes the server (really???)
 - Fix problems with selection and refresh page / turbolinks cache
 - Add volume control to small player
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing

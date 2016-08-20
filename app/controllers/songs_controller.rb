@@ -6,13 +6,14 @@ load "#{Rails.root}/lib/music/client.rb"
 # Work with available songs controller
 class SongsController < MusicBaseController
 
+  # Suggest names on searches
   include SuggestModule
 
-  # Used to stream large zip files (sooooo hard)
-  include ActionController::Live
+  # Support zip download
+  include ZipSongsModule
 
-  # Maximum number of songs to download at the same time
-  MAX_DOWNLOAD_SONGS = 200
+  # Maximum number of songs to delete at the same time
+  MAX_DOWNLOAD_DELETE = 100
 
   ###################################################
   # Actions
@@ -189,65 +190,14 @@ class SongsController < MusicBaseController
 
   end
 
-  # Download multiple songs
-  def download_multiple
-
-    # Get the songs ids
-    song_ids =  get_selected_song_ids
-    if song_ids.length == 1
-      params[:song_id] = song_ids[0]
-      download
-      return
-    end
-
-    # Get the songs paths
-    settings = Setting.get_settings
-    songs_paths = Song.find( song_ids ).take(MAX_DOWNLOAD_SONGS + 1)
-      .map { |song| song.full_path(settings) }
-
-    if songs_paths.length > MAX_DOWNLOAD_SONGS
-      raise Exception.new("Maximum number of songs to download is #{MAX_DOWNLOAD_SONGS}")
-    end
-
-    # Get the pipe of the zip sdt output
-    io = create_zip_file_popen( songs_paths )
-    zip_pid = io.pid
-    file_name = selection_file_name(:songid) + '.zip'
-
-    self.content_type = 'application/zip'
-    self.response.headers['Content-Disposition'] =
-      "attachment; filename=\"#{file_name}\""
-
-    # Stream the zip, to avoid delay and memory wasting
-    begin
-      # Write chunks of the zip file
-      chunk_size = 2**20 * 4  # 4 MB
-      until io.eof?
-        response.stream.write( io.read( chunk_size ) )
-      end
-    rescue
-      # Client disconnected is ok, don't log it
-      Log.log_last_exception if ! $!.is_a?( ActionController::Live::ClientDisconnected )
-      # Ensure zip execution is finished
-      begin
-        io.close
-      rescue
-      end
-    ensure
-      # Ensure the stream is closed
-      response.stream.close
-    end
-
-  end
-
   # Action to delete multiple songs
   def delete_multiple
 
     begin
       # Do the deletion
       ids = get_selected_song_ids
-      if ids.length > MAX_DOWNLOAD_SONGS
-        raise "Maximum number of songs to delete is #{MAX_DOWNLOAD_SONGS}"
+      if ids.length > MAX_DOWNLOAD_DELETE
+        raise "Maximum number of songs to delete is #{MAX_DOWNLOAD_DELETE}"
       end
       @toast = execute_music_cmd( :delete_songs , { songs_ids: ids } )
       # Refresh the displayed songs

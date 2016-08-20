@@ -119,7 +119,7 @@ class Song < ActiveRecord::Base
     if self.genre && self.genre.length > Constants::NAME_MAX_LENGTH
       self.genre = self.genre[0..(Constants::NAME_MAX_LENGTH-1)]
     end
-    
+
     # Get audio properties
     audio_props = file.audio_properties
     if audio_props

@@ -1,5 +1,7 @@
 require_relative '../music/cmd_result'
 
+# TODO: REMOVE THIS FILE
+
 # Create a zip file without directories structure
 # [+file_paths+] Array of file paths to tar
 # [+zip_path+] Path of the destination zip file

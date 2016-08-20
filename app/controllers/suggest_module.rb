@@ -1,6 +1,5 @@
 
 # Base class for suggestions controllers
-#class SuggestBaseController < ApplicationController
 module SuggestModule
 
   MAX_SUGGEST_RESULTS = 5
