@@ -43,8 +43,16 @@ module ZipSongsModule
 
         # Group songs by album
         songs_by_album = songs.group_by{ |s| s.album }
-        songs_by_album.keys.each do |album|
-          create_album_folder( settings, tmpdir, album , songs_by_album[album] )
+
+        if songs_by_album.keys.length == 1
+          # There is a single album: Create songs on the root
+          songs = songs_by_album[songs_by_album.keys[0]]
+          create_album_folder( settings, tmpdir, nil , songs )
+        else
+          # Create subdirectories for each album
+          songs_by_album.keys.each do |album|
+            create_album_folder( settings, tmpdir, album , songs_by_album[album] )
+          end
         end
 
         # Get the pipe of the zip sdt output
@@ -89,21 +97,44 @@ module ZipSongsModule
   ######################################
 
   # Get an unused file name
-  def get_unused_path(parent_dir, dir_name)
+  # [+parent_dir+] Directory where to search the unused file name
+  # [+file_name+] File / directory desired on parent_dir
+  # [+returns+] The full unused path
+  def get_unused_path(parent_dir, file_name)
     cnt = 0
-    path = File.join( parent_dir , dir_name )
+    path = File.join( parent_dir , file_name )
     while File.exist?( path )
       cnt += 1
-      path = File.join( parent_dir , dir_name + '-' + cnt.to_s )
+      path = File.join( parent_dir , file_name + '-' + cnt.to_s )
     end
     return path
   end
 
+  # Create symbolic links to a set of songs on a directory
+  # [+settings+] Application Setting object
+  # [+tmpdir+] Absolute directory path where create the symbolic links to songs
+  # [+album+] The Album owner of the songs. nil if there is no album
+  # [+songs+] A Song collection to link on tmpdir
   def create_album_folder(settings, tmpdir, album , songs)
 
-    # Create subdirectory for album
-    album_path = get_unused_path( tmpdir , ImagesModule.safe_file_name(album.name, true) )
-    FileUtils::mkdir_p album_path
+    if !album || songs.length == 1
+      # There is no album, or there is a single song on the album.
+      # Do not create a new subdirectory
+      album_path = tmpdir
+    else
+      # Create subdirectory for album
+      subdir_name = album.name
+      
+      # Check if there is a single artist for the album:
+      songs_by_artist = songs.group_by{ |s| s.artist }
+      if songs_by_artist.length == 1
+        subdir_name = songs_by_artist.keys[0].name + '-' + subdir_name
+      end
+
+      subdir_name = ImagesModule.safe_file_name( subdir_name , true )
+      album_path = get_unused_path( tmpdir , subdir_name )
+      FileUtils::mkdir_p album_path
+    end
 
     # Create symbolic links on the album directory, without duplicate names
     songs.each do |s|
@@ -114,6 +145,9 @@ module ZipSongsModule
 
   end
 
+  # Run the linux zip command to compress a directory
+  #[+directory+] The directory to compress
+  #[+returns+] An IO object with the zip sdtout to compress the directory
   def zip_directory_popen(directory)
 
     parent_dir = File.dirname(directory)
