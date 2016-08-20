@@ -35,7 +35,9 @@ module ZipSongsModule
 
       # Get the songs
       settings = Setting.get_settings
-      songs = Song.find( song_ids )
+      songs = Song
+        .joins(:artist, :album)
+        .find( song_ids )
         .take(MAX_DOWNLOAD_SONGS + 1)
 
       # Create a temporal directory
@@ -124,7 +126,7 @@ module ZipSongsModule
     else
       # Create subdirectory for album
       subdir_name = album.name
-      
+
       # Check if there is a single artist for the album:
       songs_by_artist = songs.group_by{ |s| s.artist }
       if songs_by_artist.length == 1
