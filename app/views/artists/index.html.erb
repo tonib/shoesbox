@@ -30,7 +30,7 @@
 <%# Table operations %>
 <p class="songs_ops_container sticky_ops">
   <%= render 'shared/songs_table/operations' ,
-    { show_edit: false , show_delete: false , show_download: false ,
+    { show_edit: false , show_delete: false , show_download: true ,
       show_excel: false } %>
 </p>
 
@@ -59,6 +59,8 @@
 <%= hidden_field_tag('add_to_queue_artists_path' , add_to_queue_artists_path ) %>
 <%# Paths to download artists playlist %>
 <%= hidden_field_tag('download_playlist_artists_path' , download_playlist_artists_path ) %>
+<%# Paths to download artists songs %>
+<%= hidden_field_tag('download_multiple_artists_path' , download_multiple_artists_path ) %>
 
 <%# Initialize the page %>
 <%= javascript_tag do %>

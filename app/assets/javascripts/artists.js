@@ -52,6 +52,15 @@ var artistsIndexPage = {
       );
     });
 
+    // Download songs
+    $('#download_songs_btn').click(function(e) {
+      e.preventDefault();
+
+      var url = $('#download_multiple_artists_path').val() + "?" +
+        $.param( that.tableChecks.getOperationParameters() );
+      download_file( url , 'Downloading songs, this will take some time' );
+    });
+
     // Autocomplete artist name
     autocomplete( '#text_filter' , $('#suggest_artists_path').val() , { hint: false } );
 

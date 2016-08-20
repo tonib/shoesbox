@@ -60,6 +60,8 @@ Rails.application.routes.draw do
     post 'add_to_queue', on: :collection
     # Download playlist
     get 'download_playlist', on: :collection
+    # Download multiple songs
+    get 'download_multiple', on: :collection
   end
 
   # Work with albums

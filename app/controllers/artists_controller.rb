@@ -3,7 +3,11 @@ require 'music/meta_generation'
 # Artists resource controller
 class ArtistsController < MusicBaseController
 
+  # Suggest artists names on searches
   include SuggestModule
+
+  # Support zip download
+  include ZipSongsModule
 
   # Number of artists to load by page
   PAGE_SIZE = 50

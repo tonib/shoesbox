@@ -65,8 +65,6 @@ SongsTableOps = function(table, tableChecks) {
 
     var url = $('#download_multiple_songs_path').val() + "?" +
       $.param( that.tableChecks.getOperationParameters(ids) );
-    //Turbolinks.visit( url );
-    //window.open(url);
     download_file( url , 'Downloading songs, this will take some time' );
   });
 
@@ -85,8 +83,6 @@ SongsTableOps = function(table, tableChecks) {
     );*/
     var url = $('#download_playlist_songs_path').val() + "?" +
       $.param( that.tableChecks.getOperationParameters(ids) );
-    //window.open(url);
-    //window.location.assign(url);
     download_file( url , 'Downloading play list');
 
   });

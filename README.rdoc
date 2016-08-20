@@ -148,6 +148,11 @@ On the browser, go to "/setting/edit", and set the configuration:
 * Key 2 = Play previous song / radio
 * Key 3 = Play next song / radio
 
+== Remarks
+
+Artists images are stored on [app_root]/public/artist_images/. If you upgrade
+or reinstall the app, keep in mind this
+
 == Licenses
 
 Shoesbox is distributed under MIT License. It distributes the following
