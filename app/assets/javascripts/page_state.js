@@ -102,10 +102,15 @@ $(document).on('page:before-unload', function(e) {
 // Page restored from the cache
 $(document).on('page:restore', function(e) {
   console.log('page:restore');
+
   // The restore from cache does not eval javascript. Do it manually:
   $('body script').each(function() {
     eval( $(this).text() );
   });
+  
+  // Remove iframes: They are added when a download is started
+  $('body iframe').remove();
+
   pageState.pageChange(true);
 });
 
