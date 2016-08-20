@@ -1,6 +1,5 @@
 require 'tempfile'
 require 'csv'
-load "#{Rails.root}/lib/tools/zip_file.rb"
 load "#{Rails.root}/lib/music/client.rb"
 
 # Work with available songs controller

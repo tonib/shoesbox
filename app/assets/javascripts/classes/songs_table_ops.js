@@ -58,8 +58,8 @@ SongsTableOps = function(table, tableChecks) {
     }
 
     var nSongs = that.tableChecks.getNSelectedSongs();
-    if( nSongs > 200 ) {
-      alert( 'The maximum nuber of songs to download is 200');
+    if( nSongs > 500 ) {
+      alert( 'The maximum number of songs to download is 500');
       return;
     }
 

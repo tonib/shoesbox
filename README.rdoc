@@ -3,6 +3,8 @@
 Shoesbox is an simple application to play and stream mp3 files and radio on a
 Raspberry Pi. <b>This project is buggy, unfinished and UNSUPPORTED.</b>
 
+Souce code: http://github.com/tonib/shoesbox
+
 == Features
 
 * Play MP3 files

@@ -3,7 +3,7 @@
 module ZipSongsModule
 
   # Maximum number of songs to download at the same time
-  MAX_DOWNLOAD_SONGS = 200
+  MAX_DOWNLOAD_SONGS = 500
 
   # Used to stream large zip files
   include ActionController::Live
@@ -11,62 +11,75 @@ module ZipSongsModule
   # Download multiple songs action
   def download_multiple
 
-    # TODO: Handle all exceptions at root of this function
-    # TODO: Handle single song download on SongsController
+    begin
 
-    # Get songs id (unique, on play lists they can be repeated)
-    song_ids =  get_selected_song_ids
-    song_ids.uniq!
+      # Get songs id (unique, on play lists songs can be repeated)
+      song_ids =  get_selected_song_ids
+      song_ids.uniq!
 
-    if song_ids.length > MAX_DOWNLOAD_SONGS
-      raise Exception.new("Maximum number of songs to download is #{MAX_DOWNLOAD_SONGS}")
-    end
-
-    # TODO: Handle songs.length == 0
-
-    # Get the songs
-    settings = Setting.get_settings
-    songs = Song.find( song_ids )
-      .take(MAX_DOWNLOAD_SONGS + 1)
-
-    # Create a temporal directory
-    Dir.mktmpdir do |tmpdir|
-
-      # Group songs by album
-      songs_by_album = songs.group_by{ |s| s.album }
-      songs_by_album.keys.each do |album|
-        create_album_folder( settings, tmpdir, album , songs_by_album[album] )
+      if song_ids.length > MAX_DOWNLOAD_SONGS
+        raise "Maximum number of songs to download is #{MAX_DOWNLOAD_SONGS}"
       end
 
-      # Get the pipe of the zip sdt output
-      io = zip_directory_popen( tmpdir )
-      zip_pid = io.pid
-      file_name = selection_file_name(:songid) + '.zip'
+      if song_ids.length == 1 && controller_name == 'songs'
+        # Special case. Download the mp3 file directly
+        params[:song_id] = song_ids[0]
+        download
+        return
+      end
 
-      self.content_type = 'application/zip'
-      self.response.headers['Content-Disposition'] =
-        "attachment; filename=\"#{file_name}\""
+      if song_ids.length == 0
+        # Nothing to do
+        raise "There are no songs to download"
+      end
 
-      # Stream the zip, to avoid delay and memory wasting
-      begin
-        # Write chunks of the zip file
-        chunk_size = 2**20 * 4  # 4 MB
-        until io.eof?
-          response.stream.write( io.read( chunk_size ) )
+      # Get the songs
+      settings = Setting.get_settings
+      songs = Song.find( song_ids )
+        .take(MAX_DOWNLOAD_SONGS + 1)
+
+      # Create a temporal directory
+      Dir.mktmpdir do |tmpdir|
+
+        # Group songs by album
+        songs_by_album = songs.group_by{ |s| s.album }
+        songs_by_album.keys.each do |album|
+          create_album_folder( settings, tmpdir, album , songs_by_album[album] )
         end
-      rescue
-        # Client disconnected is ok, don't log it
-        Log.log_last_exception if ! $!.is_a?( ActionController::Live::ClientDisconnected )
-        # Ensure zip execution is finished
+
+        # Get the pipe of the zip sdt output
+        io = zip_directory_popen( tmpdir )
+        zip_pid = io.pid
+        file_name = selection_file_name(:songid) + '.zip'
+
+        self.content_type = 'application/zip'
+        self.response.headers['Content-Disposition'] =
+          "attachment; filename=\"#{file_name}\""
+
+        # Stream the zip, to avoid delay and memory wasting
         begin
-          io.close
+          # Write chunks of the zip file
+          chunk_size = 2**20 * 4  # 4 MB
+          until io.eof?
+            response.stream.write( io.read( chunk_size ) )
+          end
         rescue
+          # Client disconnected is ok, don't log it
+          Log.log_last_exception if ! $!.is_a?( ActionController::Live::ClientDisconnected )
+          # Ensure zip execution is finished
+          begin
+            io.close
+          rescue
+          end
+        ensure
+          # Ensure the stream is closed
+          response.stream.close
         end
-      ensure
-        # Ensure the stream is closed
-        response.stream.close
+
       end
 
+    rescue
+      Log.log_last_exception
     end
 
   end
