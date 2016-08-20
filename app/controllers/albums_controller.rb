@@ -2,7 +2,11 @@
 # Albums resource controller
 class AlbumsController < MusicBaseController
 
+  # Suggest artists and albums names on searches
   include SuggestModule
+
+  # Support zip download
+  include ZipSongsModule
 
   PAGE_SIZE = 100
 

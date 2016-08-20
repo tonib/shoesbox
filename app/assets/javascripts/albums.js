@@ -43,15 +43,25 @@ var albumsIndexPage = {
     // Download playlist
     $('#album_download_playlist_btn').click(function(e) {
       e.preventDefault();
-      Turbolinks.visit( $('#download_playlist_albums_path').val() + "?" +
-        $.param( tChecks.getOperationParameters() )
-      );
+      var url = $('#download_playlist_albums_path').val() + "?" +
+        $.param( tChecks.getOperationParameters() );
+      Turbolinks.visit( url );
     });
+
+    // Download songs
+    $('#album_download_songs_btn').click(function(e) {
+      e.preventDefault();
+      var url = $('#download_multiple_albums_path').val() + "?" +
+        $.param( tChecks.getOperationParameters() );
+      download_file( url , 'Downloading songs, this will take some time' );
+    });
+
   },
 
   unbindOpButtons: function() {
     $('#album_add_to_queue_btn').unbind();
     $('#album_download_playlist_btn').unbind();
+    $('#album_download_songs_btn').unbind();
   },
 
   finalize: function() {

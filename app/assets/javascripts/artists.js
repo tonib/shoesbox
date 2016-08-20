@@ -75,6 +75,7 @@ var artistsIndexPage = {
     autocomplete_unbind( '#text_filter' );
     $('#add_to_queue_btn').unbind();
     $('#download_playlist_btn').unbind();
+    $('#download_songs_btn').unbind();
     SongsTableOps.unbindStickyOps();
   }
 

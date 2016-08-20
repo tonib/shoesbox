@@ -1,13 +1,13 @@
+- Handle errors downloading files:
+  * Error downloading album: "?" of Kylie Minogue
+  * Add download albums operation on artist show
+- Add old cds (ocults)
 - Add tooltips to songs "play random" and "refresh available songs".
   "Play random" should say the play list where the songs will be added
 - Show number of albums on albums index
 - Handle audio when playing radio on speakers: With alsa mixer?
 - Use Shellwords.escape where shell commands are executed (youtube dl, mpg321,
   etc, EVERYWHERE)
-- Handle errors downloading files:
-  * Add download anywhere
-  * Handle single song albums (don't add album folder)
-  *
 - Fix problems with selection and refresh page / turbolinks cache
 - Add volume control to small player
 - Rename 'mode' property on PlayerState table to 'source'. It's VERY confusing

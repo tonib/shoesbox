@@ -28,7 +28,7 @@
 <%# Table operations %>
 <p class="songs_ops_container sticky_ops">
   <%= render 'shared/songs_table/operations' ,
-    { show_edit: false , show_delete: false , show_download: false ,
+    { show_edit: false , show_delete: false , show_download: true ,
       show_excel: false , ids_prefix: 'album_' } %>
 </p>
 
@@ -57,6 +57,8 @@
 <%= hidden_field_tag('add_to_queue_albums_path' , add_to_queue_albums_path ) %>
 <%# Paths to download albums playlist %>
 <%= hidden_field_tag('download_playlist_albums_path' , download_playlist_albums_path ) %>
+<%# Paths to download albums songs %>
+<%= hidden_field_tag('download_multiple_albums_path' , download_multiple_albums_path ) %>
 
 <%# Initialize the page %>
 <%= javascript_tag do %>
