@@ -15,7 +15,9 @@ var albumsIndexPage = {
     $('#text_filter').val(textFilter);
 
     albumsIndexPage.albumsTable.load_parameters['text_filter'] = textFilter;
-
+    if( pageState.getUrlParameter('show_uncomplete') )
+      albumsIndexPage.albumsTable.load_parameters['show_uncomplete'] = 'true';
+    
     albumsIndexPage.bindOpButtons( albumsIndexPage.tableChecks );
 
     // Autocomplete

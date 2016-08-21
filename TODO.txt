@@ -1,5 +1,5 @@
+- Recompile mpg321 after ubuntu upgrade
 - Handle errors downloading files:
-  * Error downloading album: "?" of Kylie Minogue
   * Add download albums operation on artist show
 - Add old cds (ocults)
 - Add tooltips to songs "play random" and "refresh available songs".

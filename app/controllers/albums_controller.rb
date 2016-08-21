@@ -70,26 +70,27 @@ class AlbumsController < MusicBaseController
   # (Overrides def on MusicBaseController)
   # [+returns+] Array of songs ids
   def get_selected_song_ids
-    return get_songs_relation.pluck( 'songs.id' )
+    return get_songs_column( 'songs.id' )
   end
 
   # Returns an array with the relative path of the selected songs
   # (Overrides def on MusicBaseController)
   def get_selected_paths
-    return get_songs_relation.pluck( :path )
+    return get_songs_column( :path )
   end
 
   ###############################################
   protected
   ###############################################
 
-  def get_songs_relation
+  def get_songs_column( column )
 
     # Get the album ids
     albums_ids = get_base_relation
     albums_ids = albums_ids.where( id: params[:albumid] ) if params[:albumid] != 'all'
     albums_ids = albums_ids.pluck( 'albums.id' )
 
+    # Get the songs relation
     relation = Album.all
       .joins( :songs )
       .where( id: albums_ids )
@@ -100,7 +101,8 @@ class AlbumsController < MusicBaseController
       relation = relation.where( 'songs.artist_id' => params[:filter][:artistid] )
     end
 
-    return relation
+    # Get the column
+    return relation.pluck( column )
   end
 
   def get_base_relation
@@ -113,19 +115,18 @@ class AlbumsController < MusicBaseController
       .group( :id , :name )
       .order( :name )
 
-    # Default params
-    p[:show_uncomplete] = p[:show_uncomplete] ? "true" : "false"
+    # Filters
     p[:text_filter]  = "" if !p[:text_filter]
-
     if !p[:text_filter].empty?
       like_text = '%' + p[:text_filter] + '%'
       relation = relation.where('albums.name like ? or artists.name like ?' ,
         like_text , like_text)
     end
 
+    p[:show_uncomplete] = p[:show_uncomplete] ? "true" : "false"
     if p[:show_uncomplete] == "false"
       relation = relation.having(
-        'count(songs.id) > 3 OR ( count(songs.id) = 1 AND sum(songs.seconds) > 1800 )')
+        'count(songs.id) >= 3 OR ( count(songs.id) = 1 AND sum(songs.seconds) > 1800 )')
     end
 
     return relation
