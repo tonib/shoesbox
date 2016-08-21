@@ -78,9 +78,6 @@ SongsTableOps = function(table, tableChecks) {
       return;
     }
 
-    /*Turbolinks.visit( $('#download_playlist_songs_path').val() + "?" +
-      $.param( that.tableChecks.getOperationParameters(ids) )
-    );*/
     var url = $('#download_playlist_songs_path').val() + "?" +
       $.param( that.tableChecks.getOperationParameters(ids) );
     download_file( url , 'Downloading play list');

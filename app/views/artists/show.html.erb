@@ -31,10 +31,10 @@
   if artist_albums.count > 1
 %>
   <h2>Albums (<%= artist_albums.count %>)</h2>
-  <%# Table operations %>
+  <%# Album operations %>
   <p class="songs_ops_container">
     <%= render 'shared/songs_table/operations' ,
-      { show_edit: false , show_delete: false , show_download: false ,
+      { show_edit: false , show_delete: false , show_download: true ,
         show_excel: false , ids_prefix: 'album_' } %>
   </p>
   <table class="table table-condensed" style="width:100%" id="albums">
@@ -87,6 +87,8 @@
 <%= hidden_field_tag('add_to_queue_albums_path' , add_to_queue_albums_path ) %>
 <%# Paths to download albums playlist %>
 <%= hidden_field_tag('download_playlist_albums_path' , download_playlist_albums_path ) %>
+<%# Paths to download albums songs %>
+<%= hidden_field_tag('download_multiple_albums_path' , download_multiple_albums_path ) %>
 
 <%# Initialize the page %>
 <%= javascript_tag do %>
