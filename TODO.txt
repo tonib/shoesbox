@@ -1,10 +1,7 @@
 - Recompile mpg321 after ubuntu upgrade
-- Handle errors downloading files:
-  * Add download albums operation on artist show
 - Add old cds (ocults)
 - Add tooltips to songs "play random" and "refresh available songs".
   "Play random" should say the play list where the songs will be added
-- Show number of albums on albums index
 - Handle audio when playing radio on speakers: With alsa mixer?
 - Use Shellwords.escape where shell commands are executed (youtube dl, mpg321,
   etc, EVERYWHERE)
