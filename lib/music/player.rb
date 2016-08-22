@@ -284,10 +284,10 @@ class Player
     return if !params[:volume] && !params[:volume_increase]
 
     # mpg321 does not support change the volume when playing an URL
-    stopped = false
-    if @player_state.mode == PlayerState::SOURCE_RADIO
-      stopped = stop
-    end
+    # stopped = false
+    # if @player_state.mode == PlayerState::SOURCE_RADIO
+    #   stopped = stop
+    # end
 
     if params[:volume]
       @player_state.volume = @song_player.gain( params[:volume].to_i )
@@ -297,9 +297,9 @@ class Player
 
     ARUtils.save_cmdline(@player_state)
 
-    if stopped
-      start
-    end
+    # if stopped
+    #   start
+    # end
 
   end
 

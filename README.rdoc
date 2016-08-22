@@ -1,7 +1,9 @@
 = Shoesbox
 
 Shoesbox is an simple application to play and stream mp3 files and radio on a
-Raspberry Pi. <b>This project is buggy, unfinished and UNSUPPORTED.</b>
+Raspberry Pi 2. <b>This project is buggy, unfinished and UNSUPPORTED.</b>
+
+It should work on other devices too.
 
 Souce code: http://github.com/tonib/shoesbox
 
@@ -46,13 +48,17 @@ An uncomplete guide to setup the project:
 
 * Get a Raspberry Pi 2
 * Install Raspbian on the Raspberry
+* Set up WiFi (optional)
 
 === Install prerequisites
 
 Setup Ruby v2.2.2 (with RBENV) / Rails v4.2.1 / MySql (check
 https://gorails.com/setup/ubuntu/14.04)
 
-Install samba
+Install samba (to share music files with playlists)
+
+Install 'Utilities for configuring and using ALSA'
+  sudo apt-get alsa-utils
 
 Install rmagick (for images handling):
   sudo apt-get install libmagickwand-dev imagemagick

@@ -1,8 +1,9 @@
-- Recompile mpg321 after ubuntu upgrade
+- amixer execution: Add check of the return value. Log errors
+- Add function to set favorite radio on keypad
+- Close the pipes when mpg321 is going to be closed?
 - Add old cds (ocults)
 - Add tooltips to songs "play random" and "refresh available songs".
   "Play random" should say the play list where the songs will be added
-- Handle audio when playing radio on speakers: With alsa mixer?
 - Use Shellwords.escape where shell commands are executed (youtube dl, mpg321,
   etc, EVERYWHERE)
 - Fix problems with selection and refresh page / turbolinks cache

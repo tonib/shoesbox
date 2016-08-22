@@ -2,7 +2,7 @@ require 'open3'
 require_relative '../../app/models/task'
 
 # A client for mpg321 remote mode / play URL mode. Some of these methods
-# only work with the remote mode (pause, gain, etc)
+# only work with the remote mode (pause, etc)
 class Mpg321Client
 
   # Player status: Stopped
@@ -80,8 +80,8 @@ class Mpg321Client
       #cmd_line = "mpg321 --gain #{@level.to_s} \'#{url}\'"
       #cmd_line = "mpg321 --gain #{@level.to_s} #{url.gsub(';' , '\;')}"
 
-      # None of the previos works. So, fuck off, this still works:
-      cmd_line = "mpg321 --gain #{@level.to_s} #{url.gsub(';' , '')}"
+      # None of the previous works. So, fuck off, this still works:
+      cmd_line = "mpg321 #{url.gsub(';' , '')}"
 
       puts "Running #{cmd_line}"
       @url_pid = spawn( cmd_line )
@@ -134,7 +134,8 @@ class Mpg321Client
     level = 100 if level > 100
     @level = level
 
-    write_to_process "GAIN #{level.to_s}"
+    #write_to_process "GAIN #{level.to_s}"
+    `amixer -M sset 'Master' #{level.to_s}%`
     return level
   end
 
