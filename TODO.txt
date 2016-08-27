@@ -1,9 +1,8 @@
+- After add ActionController::Live module to ZipSongsModule module, any
+  exception kills the rails server
 - Possible bug: Show unknown album on production raspberry (exception)
-- Add function to set favorite radio on keypad
 - Close the pipes when mpg321 is going to be closed?
 - Add old cds (ocults)
-- Add tooltips to songs "play random" and "refresh available songs".
-  "Play random" should say the play list where the songs will be added
 - Use Shellwords.escape where shell commands are executed (youtube dl, mpg321,
   etc, EVERYWHERE)
 - Fix problems with selection and refresh page / turbolinks cache
@@ -73,9 +72,7 @@ https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2
   than hidden fields
 - Format README.rdoc document
 - Add option to remove the current playing song
-- Play lists handling
 - Add a filter combo with the song folder?
-- Add rdoc documentation to the web UI
 - Show ellipsis ("...") on reproduction queue table if song names does not
   fit. Now a scroll is added (ugly)
 - Support for genres
@@ -90,5 +87,6 @@ https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2
 - Add multiple wikipedias sources: Ex. english and spanish
 - Configure wifi
 - Add rating songs system
-
+- Add function to set favorite radio on keypad
+- Add option to do not repeat songs on a play list
 DONE ON THIS COMMIT:
