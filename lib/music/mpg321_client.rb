@@ -135,7 +135,12 @@ class Mpg321Client
     @level = level
 
     #write_to_process "GAIN #{level.to_s}"
-    `amixer -M sset 'Master' #{level.to_s}%`
+    cmd = "amixer -M sset 'Master' #{level.to_s}%"
+    result_text = `#{cmd}`
+    if !$?.success?
+      Log.log_error("Error executing #{cmd}", result_text)
+    end
+    
     return level
   end
 
