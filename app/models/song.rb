@@ -85,24 +85,35 @@ class Song < ActiveRecord::Base
   # [+file_size+] The file size, in bytes
   def fill( path , file , file_size )
 
+    # File info
     self.path = path
+    self.file_size = file_size
+
+    # Set default values:
+    self.name = ''
+    self.genre = ''
+    self.seconds = 0
+    self.track = 0
+    self.bitrate = 0
+    self.channels = 0
+    self.sample_rate = 0
 
     # Get file tags
     file_tags = file.tag
     if file_tags
-      self.name = file_tags.title
-      self.genre = file_tags.genre
-      self.track = file_tags.track
+      self.name = file_tags.title if file_tags.title
+      self.genre = file_tags.genre if file_tags.genre
+      self.track = file_tags.track if file_tags.track
     end
 
     # Be sure we have a name
-    if !self.name || self.name.empty?
+    if self.name.empty?
       self.name = File.basename(path, ".*")
       self.name.gsub!('_',' ')
     end
     self.name.strip!
 
-    # Try to extract the track number
+    # Try to extract the track number from the name
     begin
       if self.track == 0 && self.name =~ /\A\d+.*/
         # Get the initial number:
@@ -123,14 +134,11 @@ class Song < ActiveRecord::Base
     # Get audio properties
     audio_props = file.audio_properties
     if audio_props
-      self.seconds = audio_props.length
-      self.bitrate = audio_props.bitrate
-      self.channels = audio_props.channels
-      self.sample_rate = audio_props.sample_rate
+      self.seconds = audio_props.length if audio_props.length
+      self.bitrate = audio_props.bitrate if audio_props.bitrate
+      self.channels = audio_props.channels if audio_props.channels
+      self.sample_rate = audio_props.sample_rate if audio_props.sample_rate
     end
-
-    # File size
-    self.file_size = file_size
 
   end
 

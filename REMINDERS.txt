@@ -12,8 +12,9 @@ rake tmp:clear
 AND
 delete manually all the content of tmp/miniprofiler
 
-Zip app but artists images
-zip -r shoesbox.zip shoesbox -x shoesbox/public/artists_images/*
+Zip app but artists images and git info
+  cd ..
+  zip -r shoesbox.zip shoesbox -x shoesbox/public/artists_images/* -x shoesbox/.git/**\*
 
 To disable music services
 sudo update-rc.d rails_daemon disable

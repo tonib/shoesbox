@@ -75,6 +75,10 @@ class Mpg321Client
     # Be sure we are not running a mpg321 with remote mode
     kill_process
     begin
+
+      # Set the volume
+      gain( @level )
+
       # Crap to handle the semicolon on shoutcast URLs (ruby bug with spawn?)
       #cmd_line = "mpg321 --gain #{@level.to_s} #{url}"
       #cmd_line = "mpg321 --gain #{@level.to_s} \'#{url}\'"
@@ -134,13 +138,32 @@ class Mpg321Client
     level = 100 if level > 100
     @level = level
 
+    # This does not work playing a url (urls are not supported by mp321 on
+    # remote mode)
     #write_to_process "GAIN #{level.to_s}"
-    cmd = "amixer -M sset 'Master' #{level.to_s}%"
+
+    # -M option is right now (8/28/16) unsupported by the raspbian version...
+    # Also, 'Master' is not recognized
+    #cmd = "amixer -M sset 'Master' #{level.to_s}%"
+
+    # Try it with a 7th-root (approach, experimental number):
+    amixer_volume = @level / 100.0 # Normalize to [0-1] range
+    amixer_volume = amixer_volume**(1.0/7.0)  * 100.0  # [0 - 100]
+
+    if amixer_volume < 0
+      amixer_volume = 0
+    elsif amixer_volume > 100
+      amixer_volume = 100
+    end
+
+    cmd = "amixer set PCM #{amixer_volume.to_s}%"
+    #puts "level: #{@level.to_s}, cmd: #{cmd}"
+
     result_text = `#{cmd}`
     if !$?.success?
       Log.log_error("Error executing #{cmd}", result_text)
     end
-    
+
     return level
   end
 
