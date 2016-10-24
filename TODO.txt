@@ -1,3 +1,4 @@
+- Prueba
 - Add volume control to small player
 - Add function to set favorite radio on keypad
 - Kill mpg321 when stop is executed
