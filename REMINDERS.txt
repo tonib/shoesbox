@@ -14,7 +14,7 @@ delete manually all the content of tmp/miniprofiler
 
 Zip app but artists images and git info
   cd ..
-  zip -r shoesbox.zip shoesbox -x shoesbox/public/artists_images/* -x shoesbox/.git/**\*
+  zip -r shoesbox.zip shoesbox -x shoesbox/public/artists_images/* -x shoesbox/.git/**\* -x shoesbox/log/**\* -x shoesbox/tmp/**\*
 
 To disable music services
 sudo update-rc.d rails_daemon disable

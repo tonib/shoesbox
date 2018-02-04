@@ -1,7 +1,6 @@
-- Prueba
+- Kill mpg321 when stop is executed (BUG with long idle with mpg321)
 - Add volume control to small player
 - Add function to set favorite radio on keypad
-- Kill mpg321 when stop is executed
 - Use Shellwords.escape where shell commands are executed (youtube dl, mpg321,
   etc, EVERYWHERE)
 - Fix problems with selection and refresh page / turbolinks cache

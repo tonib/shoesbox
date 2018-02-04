@@ -24,6 +24,7 @@ APP_FILE=/home/toni/proyectos/AptanaWorkspace/shoesbox/lib/music/music_daemon.rb
 
 # The ruby version to run
 RBENV_RUBY_VERSION=2.2.2
+#RBENV_RUBY_VERSION=2.2.9
 
 #####################
 # CRAP

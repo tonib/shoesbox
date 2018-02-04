@@ -22,6 +22,7 @@ USER=toni
 
 # The ruby version to run
 RBENV_RUBY_VERSION=2.2.2
+#RBENV_RUBY_VERSION=2.2.9
 
 # The application directory
 APP_DIR=/home/toni/proyectos/AptanaWorkspace/shoesbox

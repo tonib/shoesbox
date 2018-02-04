@@ -7,7 +7,7 @@ module SpanishRadiosModule
 
       {
         name: 'Rock FM',
-        streaming_url: 'http://195.55.74.211/cope/rockfm.mp3',
+        streaming_url: 'http://195.55.74.205/cope/rockfm.mp3',
         web_url: 'http://www.rockfm.fm/',
         image_url: 'http://www.rockfm.fm/img/rockfm/RFM_HEADER.jpg'
       },

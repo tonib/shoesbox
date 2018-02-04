@@ -46,36 +46,115 @@ An uncomplete guide to setup the project:
 
 === Raspberry
 
-* Get a Raspberry Pi 2
-* Install Raspbian on the Raspberry
-* Set up WiFi (optional)
+* Get a Raspberry Pi 3
+* Install Raspbian on the Raspberry (Stretch lite)
+* Configure raspberry (sudo raspi-config)
 
 === Install prerequisites
 
-Setup Ruby v2.2.2 (with RBENV) / Rails v4.2.1 / MySql (check
+Setup Ruby v2.2.9 (with RBENV) / Rails / MySql (check
 https://gorails.com/setup/ubuntu/14.04)
+
+  # Install git and dependencies
+  sudo apt-get update
+  sudo apt-get install git-core
+  # See https://github.com/rbenv/ruby-build/wiki#openssl-usrincludeopensslasn1_mach102-error-error-this-file-is-obsolete-please-update-your-software
+  # ruby 2.2.9 will not compile with ssl1.1
+  sudo apt-get install libssl1.0-dev libreadline-dev
+
+  # Do a bashrc backup
+  cd
+  cp .bashrc .bashrc-BACKUP
+
+  # Install rbenv
+  git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+  echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+  echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+  exec $SHELL
+
+  # Install ruby-build
+  git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+  echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
+  exec $SHELL
+  # Install ruby. This will take a LONG time
+  rbenv install 2.2.9
+  rbenv global 2.2.9
+  ruby -v
+
+  # Install bundler
+  gem install bundler
+  rbenv rehash
+
+  # Install rails
+  # NOT needed. This will be do by "bundle install" on the app dir. The
+  # project Gemfile contains a reference to rails
+  #gem install rails -v 4.2.5
+  #rbenv rehash
+
+  # Install mysql and client-dev (required by mysql2 gem)
+  #sudo apt-get install mysql-server mysql-client libmysqlclient-dev
+  sudo apt-get install mysql-server mysql-client libmariadbclient-dev
+
+  # Install node.js from the node.js repository (required by rails)
+  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+  sudo apt-get install nodejs
+
 
 Install samba (to share music files with playlists)
 
+  sudo apt-get install samba
+  sudo nano /etc/samba/smb.conf
+
+Now add something like this at the end of the file. This will create a
+readable / writable directory (Warning: no security!)
+
+  ############################################
+  # TONIB:
+  ############################################
+
+  # Carpeta compartida
+  [pi compartida]
+  comment = Carpeta compartida
+  path = /home/pi/compartida
+  writeable = Yes
+  create mask = 0777
+  directory mask = 0777
+  browseable = Yes
+  #valid users @users
+  guest ok = yes
+  force user = pi
+
+Start the samba service, and check it's working
+
+  sudo /etc/init.d/smbd restart
+
 Install 'Utilities for configuring and using ALSA'
-  sudo apt-get alsa-utils
+  sudo apt-get install alsa-utils
 
 Install rmagick (for images handling):
   sudo apt-get install libmagickwand-dev imagemagick
 
 Install mpg321
 
+  sudo apt-get install mpg321
+
+There is a bug with mpg321 parsing http headers. This patch will fix it:
+https://sourceforge.net/p/mpg321/patches/19/
+
 Install espeak
 
-Install taglib-ruby
+  sudo apt-get install espeak
+
+Install taglib-ruby requirements
+
   sudo apt-get install libtag1-dev
 
 Install zip
   sudo apt-get install zip
 
-For youtube-dl (curl -L for redirections: TODO: print the new address (security) )
+For youtube-dl (https://rg3.github.io/youtube-dl/download.html)
   sudo apt-get install ffmpeg
-  sudo curl -L https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
+  sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
   sudo chmod a+rx /usr/local/bin/youtube-dl
 
 === Setup Gems
@@ -87,10 +166,12 @@ For youtube-dl (curl -L for redirections: TODO: print the new address (security)
 === Setup MySql database
 
 Login on mysql as root, and create the application user:
-  mysql shoesbox -u root -p
+  #mysql shoesbox -u root -p
+  sudo mysql shoesbox -u root
   CREATE USER 'shoesbox'@'localhost' IDENTIFIED BY 'shoesbox';
   GRANT ALL PRIVILEGES ON * . * TO 'shoesbox'@'localhost';
   FLUSH PRIVILEGES;
+  \q
 
 Create the database:
   cd [application_directory]
@@ -119,7 +200,25 @@ Raspberry is booted. To start / stop the services:
 To run the services on the console, not as daemon, to debug errors:
   cd [application_directory]
   ruby lib/music/music_daemon.rb run
-  rails server -e production --binding=0.0.0.0 -p 80
+  rails server -e production --binding=0.0.0.0 -p 8080
+
+=== Other (personal) stuff
+
+If you have your music, as I do, on a USB pendrive, you should add it
+to the mount table
+  sudo nano /etc/fstab
+
+Add a line with something like this
+  /dev/sda1        /home/pi/compartida/musica/discousb vfat  defaults,uid=pi,gid=pi,umask=000,utf8   0   0
+
+If you want a static IP for wifi, then:
+  sudo nano /etc/dhcpcd.conf
+
+Add these to set the static IP
+  # tonib: Static IP for wifi
+  interface wlan0
+  static ip_address=192.168.1.100/24
+  static routers=192.168.1.1
 
 === Shoesbox settings
 
